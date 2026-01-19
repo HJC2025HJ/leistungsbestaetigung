@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leistungsbestätigung</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#eef2f3;
+  margin:0;padding:20px
+}
+.container{
+  max-width:1000px;
+  margin:auto;
+  background:#fff;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.12)
+}
+.header{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  border-bottom:2px solid #e5e7eb;
+  padding-bottom:15px
+}
+.logo{max-width:140px}
+.company{font-size:14px;line-height:1.5}
+h1{text-align:center;margin:20px 0 5px}
+.meta{text-align:right;font-size:14px;margin-bottom:20px}
+h3{
+  margin-top:30px;
+  border-left:4px solid #22c55e;
+  padding-left:10px
+}
+
+.row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+  margin-top:12px
+}
+
+.field label{
+  font-weight:600;
+  display:block;
+  margin-bottom:6px
+}
+.field input,
+.field textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:14px
+}
+textarea{min-height:90px}
+
+.currency{position:relative}
+.currency::after{
+  content:"€";
+  position:absolute;
+  right:12px;
+  top:40px;
+  font-weight:600;
+  color:#374151
+}
+.currency input{padding-right:30px}
+
+.signatures{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+  margin-top:30px
+}
+.signature-box{
+  background:#f9fafb;
+  border:1px solid #e5e7eb;
+  padding:15px;
+  border-radius:10px
+}
+canvas{
+  width:100%;
+  height:150px;
+  border:2px dashed #9ca3af;
+  border-radius:10px;
+  margin-top:10px;
+  touch-action:none
+}
+.sig-info{font-size:13px;margin-top:6px}
+
+.sig-actions{
+  display:flex;
+  gap:10px;
+  margin-top:10px
+}
+button{
+  padding:9px 14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  color:#fff
+}
+.confirm{background:#22c55e}
+.delete{background:#ef4444}
+.print{background:#2563eb;font-size:15px;padding:12px 20px}
+
+.actions{text-align:center;margin-top:40px}
+
+@media print{
+  button,.sig-actions,.actions{display:none!important}
+  body{background:#fff}
+  .container{box-shadow:none;padding:10mm}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+  <img src="HJ_Clean.png" class="logo">
+  <div class="company">
+    <strong>Cleaning</strong> – Marke von HJ Corporate GbR<br>
+    Stauseestraße 27b, 54317 Riveris<br>
+    Tel. +49 176 87898900 · info@hjcorporate.de
+  </div>
+</div>
+
+<h1>Leistungsbestätigung</h1>
+<div class="meta">Dokument-Nr.: <strong id="docNr"></strong></div>
+
+<h3>Mitarbeiter</h3>
+<div class="field">
+  <label><input type="checkbox" class="emp" value="Hervé Mbarga"> Hervé Mbarga</label><br>
+  <label><input type="checkbox" class="emp" value="Jacky Massing"> Jacky Massing</label>
+</div>
+
+<h3>Kundendaten</h3>
+<div class="row">
+  <div class="field"><label>Vorname</label><input id="kundeVorname"></div>
+  <div class="field"><label>Nachname</label><input id="kundeNachname"></div>
+  <div class="field"><label>Telefon</label><input></div>
+  <div class="field"><label>Anschrift</label><input></div>
+</div>
+
+<h3>Leistungsdetails</h3>
+<div class="row">
+  <div class="field"><label>Datum</label><input type="date"></div>
+  <div class="field"><label>Uhrzeit von</label><input type="time" id="start"></div>
+  <div class="field"><label>Uhrzeit bis</label><input type="time" id="end"></div>
+</div>
+
+<div class="row">
+  <div class="field">
+    <label>Beschreibung der ausgeführten Arbeiten</label>
+    <textarea></textarea>
+  </div>
+</div>
+
+<h3>Berechnung</h3>
+<div class="row">
+  <div class="field"><label>Arbeitsstunden</label><input id="stunden" readonly></div>
+  <div class="field currency"><label>Kosten pro Stunde</label><input id="stundenPreis"></div>
+  <div class="field"><label>Kilometer (KM)</label><input id="km"></div>
+</div>
+
+<div class="row">
+  <div class="field currency"><label>Anfahrtkosten pro KM</label><input id="kmPreis"></div>
+  <div class="field currency"><label>Anfahrtkosten gesamt</label><input id="anfahrt" readonly></div>
+  <div class="field currency"><label>Gesamtbetrag</label><input id="betrag" readonly></div>
+</div>
+
+<h3>Unterschriften</h3>
+<div class="signatures">
+
+<div class="signature-box">
+  <strong>Kunde</strong>
+  <canvas id="sigKunde"></canvas>
+  <div class="sig-info" id="kundeInfo"></div>
+  <div class="sig-actions">
+    <button class="confirm" onclick="confirmKunde()">Bestätigen</button>
+    <button class="delete" onclick="clearSig('sigKunde','kundeInfo')">Löschen</button>
+  </div>
+</div>
+
+<div class="signature-box">
+  <strong>Mitarbeiter</strong>
+  <div class="sig-info" id="empNames"></div>
+  <canvas id="sigMit"></canvas>
+  <div class="sig-info" id="mitInfo"></div>
+  <div class="sig-actions">
+    <button class="confirm" onclick="confirmMit()">Bestätigen</button>
+    <button class="delete" onclick="clearSig('sigMit','mitInfo')">Löschen</button>
+  </div>
+</div>
+
+</div>
+
+<div class="actions">
+  <button class="print" onclick="prepareAndPrint()">Als PDF speichern / drucken</button>
+</div>
+
+</div>
+
+<script>
+const now=new Date();
+const docNr="LB-"+now.toISOString().slice(0,10)+"-"+Math.floor(Math.random()*1000);
+document.getElementById("docNr").innerText=docNr;
+
+function prepareAndPrint(){
+ const v=kundeVorname.value.trim();
+ const n=kundeNachname.value.trim();
+ document.title=v||n ? docNr+"_"+n+"_"+v : docNr;
+ window.print();
+}
+
+function enableSig(c){
+ let ctx=c.getContext("2d"),d=false;
+ c.onpointerdown=()=>d=true;
+ c.onpointerup=()=>{d=false;ctx.beginPath()};
+ c.onpointermove=e=>{
+  if(!d)return;
+  let r=c.getBoundingClientRect();
+  ctx.lineWidth=2;ctx.lineCap="round";
+  ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+  ctx.stroke();ctx.beginPath();
+  ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+ }
+}
+enableSig(sigKunde); enableSig(sigMit);
+
+function confirmKunde(){
+ sigKunde.style.pointerEvents="none";
+ kundeInfo.innerText="Elektronisch signiert am "+new Date().toLocaleString();
+}
+function confirmMit(){
+ let emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value);
+ if(!emps.length){alert("Bitte Mitarbeiter auswählen");return;}
+ empNames.innerText=emps.join(" & ");
+ sigMit.style.pointerEvents="none";
+ mitInfo.innerText="Elektronisch signiert von "+emps.join(" & ")+" am "+new Date().toLocaleString();
+}
+function clearSig(id,info){
+ let c=document.getElementById(id);
+ c.getContext("2d").clearRect(0,0,c.width,c.height);
+ c.style.pointerEvents="auto";
+ document.getElementById(info).innerText="";
+}
+
+function calc(){
+ if(start.value && end.value){
+  let d=(new Date("1970-1-1 "+end.value)-new Date("1970-1-1 "+start.value))/3600000;
+  stunden.value=Math.max(0,d).toFixed(2);
+ }
+ let a=(km.value||0)*(kmPreis.value||0);
+ anfahrt.value=a.toFixed(2);
+ betrag.value=((stunden.value||0)*(stundenPreis.value||0)+a).toFixed(2);
+}
+document.querySelectorAll("input").forEach(i=>i.oninput=calc);
+</script>
+</body>
+</html>
