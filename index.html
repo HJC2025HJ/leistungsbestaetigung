@@ -1,196 +1,237 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leistungsbestätigung – HJ Cleaning</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leistungsbestätigung – HJ Cleaning</title>
 
-  <style>
-    body{
-      font-family:"Segoe UI",Arial,sans-serif;
-      background:linear-gradient(135deg,#eef2f3,#dfe9f3);
-      margin:0;padding:20px
-    }
-    .container{
-      max-width:950px;margin:auto;background:#fff;padding:30px;
-      border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.12)
-    }
-    .header{display:flex;gap:20px;align-items:center;border-bottom:2px solid #e5e7eb;padding-bottom:15px;margin-bottom:25px}
-    .logo{max-width:150px}
-    .company{font-size:14px;line-height:1.5}
-    h1{text-align:center;margin:16px 0 8px;font-size:28px}
-    .meta{text-align:right;font-size:14px;color:#374151;margin-bottom:20px}
-    h3{margin-top:30px;color:#111827;border-left:4px solid #22c55e;padding-left:10px}
-    .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:10px}
-    label{font-weight:600;margin-bottom:6px;display:block;color:#374151}
-    input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid #d1d5db;font-size:14px}
-    textarea{min-height:100px}
+<style>
+body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:linear-gradient(135deg,#eef2f3,#dfe9f3);
+  margin:0;padding:20px
+}
+.container{
+  max-width:950px;margin:auto;background:#fff;padding:30px;
+  border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.12)
+}
+.header{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:20px;
+  align-items:center;
+  border-bottom:2px solid #e5e7eb;
+  padding-bottom:15px;
+  margin-bottom:25px
+}
+.logo{max-width:150px}
+.company{font-size:14px;line-height:1.5}
+h1{text-align:center;margin:20px 0;font-size:30px}
+.meta{text-align:right;font-size:14px;color:#374151}
 
-    .signatures{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:30px}
-    @media(max-width:700px){.signatures{grid-template-columns:1fr}}
+h3{
+  margin-top:30px;
+  color:#111827;
+  border-left:4px solid #22c55e;
+  padding-left:10px
+}
 
-    .signature-box{background:#f9fafb;padding:15px;border-radius:12px;border:1px solid #e5e7eb}
-    canvas{width:100%;height:160px;border:2px dashed #9ca3af;border-radius:10px;margin-top:10px;background:#fff;touch-action:none}
-    .sig-info{font-size:13px;margin-top:6px;color:#374151}
-    .sig-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.row{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin-top:12px
+}
+@media(max-width:700px){
+  .row{grid-template-columns:1fr}
+  .header{grid-template-columns:1fr;text-align:center}
+  .logo{margin:0 auto}
+}
 
-    button{padding:12px 16px;font-size:15px;border:none;border-radius:10px;cursor:pointer;color:#fff}
-    .btn-confirm{background:#22c55e}
-    .btn-delete{background:#ef4444}
-    .btn-print{background:#2563eb;width:100%;font-size:17px}
-    button:disabled{background:#9ca3af;cursor:not-allowed}
+label{font-weight:600;color:#374151}
+input,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #d1d5db;
+  font-size:14px
+}
+textarea{min-height:100px}
 
-    .actions{text-align:center;margin-top:40px}
+.emp-list{
+  display:flex;
+  gap:20px;
+  margin-top:10px;
+  flex-wrap:wrap
+}
+.emp-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:15px
+}
 
-    /* Mobile UX */
-    @media(max-width:700px){
-      .btn-print{position:sticky;bottom:10px}
-    }
+.signatures{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+  margin-top:30px
+}
+@media(max-width:700px){.signatures{grid-template-columns:1fr}}
 
-    /* Print */
-    @media print{
-      body{background:#fff;padding:0}
-      .container{box-shadow:none;border-radius:0;padding:10mm}
-      button,.sig-actions,.actions{display:none!important}
-      canvas{border:1px solid #000}
-    }
-  </style>
+.signature-box{
+  background:#f9fafb;
+  padding:15px;
+  border-radius:12px;
+  border:1px solid #e5e7eb
+}
+canvas{
+  width:100%;
+  height:160px;
+  border:2px dashed #9ca3af;
+  border-radius:10px;
+  background:#fff;
+  touch-action:none
+}
+
+.sig-info{font-size:13px;margin-top:6px;color:#374151}
+.sig-actions{display:flex;gap:8px;margin-top:10px}
+
+button{
+  padding:12px 16px;
+  font-size:15px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  color:#fff
+}
+.btn-confirm{background:#22c55e}
+.btn-delete{background:#ef4444}
+.btn-print{background:#2563eb;width:100%;font-size:17px}
+button:disabled{background:#9ca3af;cursor:not-allowed}
+
+.actions{text-align:center;margin-top:40px}
+
+@media print{
+  body{background:#fff;padding:0}
+  .container{box-shadow:none;border-radius:0}
+  button,.sig-actions,.actions{display:none}
+  canvas{border:1px solid #000}
+}
+</style>
 </head>
+
 <body>
 <div class="container">
 
-  <div class="header">
-    <img src="HJ_Clean.png" class="logo" alt="HJ Cleaning Logo">
-    <div class="company">
-      <strong>Cleaning</strong> – Marke von HJ Corporate GbR<br>
-      Stauseestraße 27b, 54317 Riveris<br>
-      Tel. +49 176 87898900 · info@hjcorporate.de
-    </div>
-  </div>
-
-  <h1>Leistungsbestätigung</h1>
-  <div class="meta">Dokument-Nr.: <strong id="docNr"></strong></div>
-
-  <h3>Mitarbeiter</h3>
-  <div class="row">
-    <div>
-      <label>Ausführender Mitarbeiter</label>
-      <select id="employeeSelect">
-        <option value="">Bitte auswählen</option>
-        <option value="Hervé Mbarga">Hervé Mbarga</option>
-        <option value="Jacky Massing">Jacky Massing</option>
-      </select>
-    </div>
-  </div>
-
-  <h3>Kundendaten</h3>
-  <div class="row">
-    <div><label>Vorname</label><input></div>
-    <div><label>Nachname</label><input></div>
-    <div><label>Telefon</label><input></div>
-    <div><label>Anschrift</label><input></div>
-  </div>
-
-  <h3>Leistungsdetails</h3>
-  <div class="row">
-    <div><label>Datum</label><input type="date"></div>
-    <div><label>Von</label><input type="time"></div>
-    <div><label>Bis</label><input type="time"></div>
-  </div>
-  <div class="row">
-    <div><label>Beschreibung der ausgeführten Arbeiten</label><textarea></textarea></div>
-  </div>
-
-  <h3>Unterschriften</h3>
-  <div class="signatures">
-
-    <div class="signature-box">
-      <strong>Kunde</strong>
-      <canvas id="sigKunde"></canvas>
-      <div class="sig-info" id="kundeInfo"></div>
-      <div class="sig-actions">
-        <button class="btn-confirm" id="btnKundeConfirm">Bestätigen</button>
-        <button class="btn-delete" id="btnKundeClear">Löschen</button>
-      </div>
-    </div>
-
-    <div class="signature-box">
-      <strong>Mitarbeiter</strong>
-      <div class="sig-info" id="mitarbeiterName"></div>
-      <canvas id="sigMit"></canvas>
-      <div class="sig-info" id="mitInfo"></div>
-      <div class="sig-actions">
-        <button class="btn-confirm" id="btnMitConfirm">Bestätigen</button>
-        <button class="btn-delete" id="btnMitClear">Löschen</button>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="actions">
-    <button class="btn-print" onclick="window.print()">Als PDF speichern / drucken</button>
+<div class="header">
+  <img src="HJ_Clean.png" class="logo">
+  <div class="company">
+    <strong>Cleaning</strong> – Marke von HJ Corporate GbR<br>
+    Stauseestraße 27b, 54317 Riveris<br>
+    Tel. +49 176 87898900 · info@hjcorporate.de
   </div>
 </div>
 
+<h1>Leistungsbestätigung</h1>
+<div class="meta">Dokument-Nr.: <strong id="docNr"></strong></div>
+
+<h3>Mitarbeiter</h3>
+<div class="emp-list">
+  <label class="emp-item">
+    <input type="checkbox" value="Hervé Mbarga" class="emp"> Hervé Mbarga
+  </label>
+  <label class="emp-item">
+    <input type="checkbox" value="Jacky Massing" class="emp"> Jacky Massing
+  </label>
+</div>
+
+<h3>Kundendaten</h3>
+<div class="row">
+  <input placeholder="Vorname">
+  <input placeholder="Nachname">
+  <input placeholder="Telefon">
+  <input placeholder="Anschrift">
+</div>
+
+<h3>Leistungsdetails</h3>
+<div class="row">
+  <input type="date">
+  <input type="time">
+  <input type="time">
+</div>
+<textarea placeholder="Beschreibung der ausgeführten Arbeiten"></textarea>
+
+<h3>Unterschriften</h3>
+<div class="signatures">
+
+<div class="signature-box">
+  <strong>Kunde</strong>
+  <canvas id="sigKunde"></canvas>
+  <div class="sig-info" id="kundeInfo"></div>
+  <div class="sig-actions">
+    <button class="btn-confirm" id="kConfirm">Bestätigen</button>
+    <button class="btn-delete" id="kClear">Löschen</button>
+  </div>
+</div>
+
+<div class="signature-box">
+  <strong>Mitarbeiter</strong>
+  <div class="sig-info" id="empNames"></div>
+  <canvas id="sigMit"></canvas>
+  <div class="sig-info" id="mitInfo"></div>
+  <div class="sig-actions">
+    <button class="btn-confirm" id="mConfirm">Bestätigen</button>
+    <button class="btn-delete" id="mClear">Löschen</button>
+  </div>
+</div>
+
+</div>
+
+<div class="actions">
+  <button class="btn-print" onclick="window.print()">Als PDF speichern / drucken</button>
+</div>
+
+</div>
+
 <script>
-  const now=new Date();
-  document.getElementById('docNr').innerText='LB-'+now.toISOString().slice(0,10)+'-'+Math.floor(Math.random()*1000);
+const now=new Date();
+docNr.innerText="LB-"+now.toISOString().slice(0,10)+"-"+Math.floor(Math.random()*1000);
 
-  function enableSignature(canvas){
-    const ctx=canvas.getContext('2d');let draw=false;
-    canvas.addEventListener('pointerdown',()=>draw=true);
-    canvas.addEventListener('pointerup',()=>{draw=false;ctx.beginPath()});
-    canvas.addEventListener('pointermove',e=>{
-      if(!draw)return;
-      const r=canvas.getBoundingClientRect();
-      ctx.lineWidth=2;ctx.lineCap='round';
-      ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
-      ctx.stroke();ctx.beginPath();
-      ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
-    });
-  }
+function sign(canvas){
+  const ctx=canvas.getContext("2d");
+  let d=false;
+  canvas.addEventListener("pointerdown",()=>d=true);
+  canvas.addEventListener("pointerup",()=>{d=false;ctx.beginPath()});
+  canvas.addEventListener("pointermove",e=>{
+    if(!d)return;
+    const r=canvas.getBoundingClientRect();
+    ctx.lineWidth=2;
+    ctx.lineCap="round";
+    ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+  });
+}
 
-  enableSignature(sigKunde);
-  enableSignature(sigMit);
+sign(sigKunde); 
+sign(sigMit);
 
-  /* === Kunde === */
-  btnKundeConfirm.onclick=()=>{
-    sigKunde.style.pointerEvents='none';
-    localStorage.setItem('sigKunde',sigKunde.toDataURL());
-    kundeInfo.innerText='Elektronisch signiert am '+new Date().toLocaleString();
-    btnKundeConfirm.disabled=true;
-    btnKundeClear.disabled=true;
-  };
+kConfirm.onclick=()=>{
+  sigKunde.style.pointerEvents="none";
+  kundeInfo.innerText="Elektronisch signiert am "+new Date().toLocaleString();
+  kConfirm.disabled=kClear.disabled=true;
+};
 
-  btnKundeClear.onclick=()=>{
-    const ctx=sigKunde.getContext('2d');ctx.clearRect(0,0,sigKunde.width,sigKunde.height);
-    localStorage.removeItem('sigKunde');kundeInfo.innerText='';
-  };
-
-  /* === Mitarbeiter === */
-  btnMitConfirm.onclick=()=>{
-    const emp=employeeSelect.value;
-    if(!emp){alert('Bitte Mitarbeiter auswählen');return;}
-    mitarbeiterName.innerText=emp;
-    sigMit.style.pointerEvents='none';
-    localStorage.setItem('sigMit',sigMit.toDataURL());
-    mitInfo.innerText='Elektronisch signiert von '+emp+' am '+new Date().toLocaleString();
-    btnMitConfirm.disabled=true;
-    btnMitClear.disabled=true;
-  };
-
-  btnMitClear.onclick=()=>{
-    const ctx=sigMit.getContext('2d');ctx.clearRect(0,0,sigMit.width,sigMit.height);
-    localStorage.removeItem('sigMit');mitInfo.innerText='';
-  };
-
-  /* === Charger signatures sauvegardées === */
-  window.onload=()=>{
-    const sK=localStorage.getItem('sigKunde');
-    if(sK){let i=new Image();i.onload=()=>sigKunde.getContext('2d').drawImage(i,0,0);i.src=sK}
-    const sM=localStorage.getItem('sigMit');
-    if(sM){let i=new Image();i.onload=()=>sigMit.getContext('2d').drawImage(i,0,0);i.src=sM}
-  };
+mConfirm.onclick=()=>{
+  const emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value);
+  if(!emps.length){alert("Bitte mindestens einen Mitarbeiter auswählen");return;}
+  empNames.innerText=emps.join(" & ");
+  sigMit.style.pointerEvents="none";
+  mitInfo.innerText="Elektronisch signiert von "+emps.join(" & ")+" am "+new Date().toLocaleString();
+  mConfirm.disabled=mClear.disabled=true;
+};
 </script>
 </body>
 </html>
