@@ -14,7 +14,25 @@ body{
   background:#f1f5f9;
 }
 
+/* Watermark */
+.watermark{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  z-index:0;
+  pointer-events:none;
+  opacity:0.07;
+}
+.watermark img{
+  width:80vw;
+  max-width:700px;
+  filter:grayscale(100%);
+}
+
 .app{
+  position:relative;
+  z-index:1;
   max-width:900px;
   width:100%;
   margin:auto;
@@ -30,9 +48,7 @@ body{
   align-items:center;
   flex-wrap:wrap;
 }
-
 .logo{height:70px;max-width:40vw;object-fit:contain}
-
 .company{font-size:14px;line-height:1.4;flex:1}
 
 h1{margin:15px 0 5px;font-size:28px}
@@ -46,22 +62,20 @@ h1{margin:15px 0 5px;font-size:28px}
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:12px;
 }
-
 @media(max-width:600px){
   .grid{grid-template-columns:1fr}
 }
 
+/* Floating labels */
 .field{position:relative}
-
 .field input,.field textarea{
   width:100%;
   padding:14px 10px 8px;
   border-radius:10px;
   border:1px solid #cbd5e1;
-  font-size:16px;   /* important for iOS zoom */
+  font-size:16px;
   background:#fff;
 }
-
 .field label{
   position:absolute;
   left:12px;
@@ -73,7 +87,6 @@ h1{margin:15px 0 5px;font-size:28px}
   background:#fff;
   padding:0 4px;
 }
-
 .field input:focus+label,
 .field input:not(:placeholder-shown)+label,
 .field textarea:focus+label,
@@ -83,6 +96,7 @@ h1{margin:15px 0 5px;font-size:28px}
   color:#22c55e;
 }
 
+/* Signatures */
 .signature{
   border:2px dashed #cbd5e1;
   border-radius:12px;
@@ -90,13 +104,11 @@ h1{margin:15px 0 5px;font-size:28px}
   touch-action:none;
   background:#fff;
 }
-
 .sigbox{
   background:#f8fafc;
   padding:10px;
   border-radius:12px;
 }
-
 .sig-actions{
   display:flex;
   gap:8px;
@@ -111,7 +123,6 @@ button{
   font-size:16px;
   cursor:pointer;
 }
-
 .ok{background:#22c55e}
 .del{background:#ef4444}
 .print{background:#2563eb;width:100%;margin-top:20px;font-size:18px}
@@ -124,6 +135,12 @@ button{
 </head>
 
 <body>
+
+<!-- Watermark -->
+<div class="watermark">
+  <img src="HJ_Clean.png">
+</div>
+
 <div class="app">
 
 <div class="header">
@@ -131,7 +148,7 @@ button{
 <div class="company">
 Cleaning – Marke von HJ Corporate GbR<br>
 Stauseestraße 27b, 54317 Riveris<br>
-Tel. +49 1575 7218870 · info@hjcorporate.de
+Tel. +49 176 87898900 · info@hjcorporate.de
 </div>
 </div>
 
@@ -147,10 +164,10 @@ Tel. +49 1575 7218870 · info@hjcorporate.de
 <div class="section">
 <h2>Kunde</h2>
 <div class="grid">
-<div class="field"><input placeholder=" "><label>Vorname</label></div>
-<div class="field"><input placeholder=" "><label>Nachname</label></div>
-<div class="field"><input placeholder=" "><label>Telefon</label></div>
-<div class="field"><input placeholder=" "><label>Anschrift</label></div>
+<div class="field"><input id="vorname" placeholder=" "><label>Vorname</label></div>
+<div class="field"><input id="nachname" placeholder=" "><label>Nachname</label></div>
+<div class="field"><input id="telefon" placeholder=" "><label>Telefon</label></div>
+<div class="field"><input id="adresse" placeholder=" "><label>Anschrift</label></div>
 </div>
 </div>
 
@@ -204,6 +221,7 @@ Tel. +49 1575 7218870 · info@hjcorporate.de
 <script>
 nr.innerText="LB-"+Date.now();
 
+// Calculations
 function calc(){
   if(start.value && end.value){
     let s=new Date("1970-01-01T"+start.value);
@@ -218,9 +236,9 @@ function calc(){
   let h2=+hours.value||0;
   total.value=(h2*r+kmv*kr).toFixed(2);
 }
-
 ["start","end","rate","km","kmrate"].forEach(i=>document.getElementById(i).addEventListener("input",calc));
 
+// Signatures
 function setup(c){
   const ctx=c.getContext("2d");let d=false;
   c.onpointerdown=()=>d=true;
@@ -237,9 +255,11 @@ function setup(c){
 }
 setup(sig1);setup(sig2);
 
+// Kunde
 cConfirm.onclick=()=>{sig1.style.pointerEvents="none";cConfirm.disabled=true;cClear.disabled=true;}
 cClear.onclick=()=>{sig1.getContext("2d").clearRect(0,0,sig1.width,sig1.height);}
 
+// Mitarbeiter
 mConfirm.onclick=()=>{
   let emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value);
   if(!emps.length){alert("Bitte Mitarbeiter auswählen");return;}
