@@ -2,219 +2,144 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Leistungsbestätigung – HJ Cleaning</title>
 
 <style>
-body{
-  font-family:"Segoe UI",Arial,sans-serif;
-  background:#eef2f3;
-  margin:0;padding:20px
-}
-.container{
-  max-width:950px;margin:auto;background:#fff;padding:30px;
-  border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.12)
-}
-.header{
-  display:grid;
-  grid-template-columns:auto 1fr;
-  gap:20px;
-  align-items:center;
-  border-bottom:2px solid #e5e7eb;
-  padding-bottom:15px;
-  margin-bottom:25px
-}
-.logo{max-width:140px}
-.company{font-size:14px;line-height:1.5}
-h1{text-align:center;margin:20px 0;font-size:30px}
-.meta{text-align:right;font-size:14px}
-
-h3{
-  margin-top:30px;
-  border-left:4px solid #22c55e;
-  padding-left:10px
-}
-
-.row{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-top:10px
-}
-@media(max-width:700px){
-  .row{grid-template-columns:1fr}
-  .header{grid-template-columns:1fr;text-align:center}
-  .logo{margin:0 auto}
-}
-
-input,textarea{
-  width:100%;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #d1d5db;
-  font-size:14px;
-  text-align:center
-}
-textarea{min-height:90px;text-align:left}
-
-.emp-list{
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap
-}
-
-.signatures{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:25px;
-  margin-top:30px
-}
-@media(max-width:700px){.signatures{grid-template-columns:1fr}}
-
-.signature-box{
-  background:#f9fafb;
-  padding:15px;
-  border-radius:12px;
-  border:1px solid #e5e7eb
-}
-canvas{
-  width:100%;
-  height:160px;
-  border:2px dashed #9ca3af;
-  border-radius:10px;
-  touch-action:none
-}
-
-button{
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  color:#fff;
-  cursor:pointer
-}
-.confirm{background:#22c55e}
-.delete{background:#ef4444}
-.print{background:#2563eb;width:100%;font-size:16px}
-button:disabled{background:#9ca3af}
-
-@media print{
-  button{display:none}
-  body{background:#fff}
-  canvas{border:1px solid #000}
-}
+body{font-family:system-ui;background:#eef2f5;margin:0;padding:10px}
+.container{max-width:900px;margin:auto;background:#fff;padding:20px;border-radius:12px}
+h1{text-align:center}
+label{font-weight:600;margin-top:10px;display:block}
+input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.signature-box{border:2px dashed #aaa;border-radius:10px;padding:10px;margin-top:10px}
+canvas{width:100%;height:150px;border:1px solid #000}
+button{padding:12px;border:none;border-radius:10px;font-size:16px;color:#fff}
+.green{background:#16a34a}
+.red{background:#dc2626}
+.blue{background:#2563eb;width:100%}
+@media print{button{display:none}}
 </style>
 </head>
 
 <body>
 <div class="container">
 
-<div class="header">
-  <img src="HJ_Clean.png" class="logo">
-  <div class="company">
-    <strong>Cleaning</strong> – Marke von HJ Corporate GbR<br>
-    Stauseestraße 27b, 54317 Riveris<br>
-    Tel. +49 176 87898900 · info@hjcorporate.de
-  </div>
+<h1>Leistungsbestätigung</h1>
+<p>Nr: <b id="docNr"></b></p>
+
+<label>Mitarbeiter</label>
+<label><input type="checkbox" class="emp" value="Hervé Mbarga"> Hervé Mbarga</label>
+<label><input type="checkbox" class="emp" value="Jacky Massing"> Jacky Massing</label>
+
+<hr>
+
+<label>Vorname</label><input id="vorname">
+<label>Nachname</label><input id="nachname">
+<label>Telefon</label><input id="telefon">
+
+<hr>
+
+<div class="row">
+<div><label>Datum</label><input type="date" id="datum"></div>
+<div><label>Start</label><input type="time" id="start"></div>
+<div><label>Ende</label><input type="time" id="ende"></div>
 </div>
 
-<h1>Leistungsbestätigung</h1>
-<div class="meta">Nr.: <span id="docNr"></span></div>
+<hr>
+
+<div class="row">
+<div><label>€ pro Stunde</label><input id="preis" type="number"></div>
+<div><label>Kilometer</label><input id="km" type="number"></div>
+<div><label>€ pro KM</label><input id="kmPreis" type="number"></div>
+</div>
+
+<div class="row">
+<div><label>Anfahrtskosten</label><input id="fahrt" readonly></div>
+<div><label>Arbeitsstunden</label><input id="stunden" readonly></div>
+<div><label>Gesamt €</label><input id="total" readonly></div>
+</div>
+
+<hr>
+
+<h3>Kunde</h3>
+<div class="signature-box">
+<canvas id="sigClient"></canvas>
+<button class="green" onclick="confirmClient()">Bestätigen</button>
+<button class="red" onclick="clearSig('sigClient')">Löschen</button>
+<p id="clientInfo"></p>
+</div>
 
 <h3>Mitarbeiter</h3>
-<div class="emp-list">
-  <label><input type="checkbox" class="emp" value="Hervé Mbarga"> Hervé Mbarga</label>
-  <label><input type="checkbox" class="emp" value="Jacky Massing"> Jacky Massing</label>
-</div>
-
-<h3>Datum & Zeit</h3>
-<div class="row">
-  <input id="d" maxlength="2" placeholder="TT">
-  <input id="m" maxlength="2" placeholder="MM">
-  <input id="y" maxlength="4" placeholder="JJJJ">
-</div>
-
-<div class="row">
-  <input id="sh" maxlength="2" placeholder="Start HH">
-  <input id="sm" maxlength="2" placeholder="MM">
-  <input id="eh" maxlength="2" placeholder="Ende HH">
-  <input id="em" maxlength="2" placeholder="MM">
-</div>
-
-<h3>Berechnung</h3>
-<div class="row">
-  <input id="hours" readonly placeholder="Arbeitsstunden">
-  <input id="rate" placeholder="€/Stunde">
-</div>
-<div class="row">
-  <input id="km" placeholder="KM">
-  <input id="kmrate" placeholder="€/KM">
-</div>
-<div class="row">
-  <input id="travel" readonly placeholder="Anfahrtkosten €">
-  <input id="total" readonly placeholder="Gesamtbetrag €">
-</div>
-
-<h3>Unterschriften</h3>
-<div class="signatures">
 <div class="signature-box">
-  Kunde
-  <canvas id="sigK"></canvas>
-  <button class="confirm" id="kc">Bestätigen</button>
-</div>
-<div class="signature-box">
-  Mitarbeiter
-  <div id="empNames"></div>
-  <canvas id="sigM"></canvas>
-  <button class="confirm" id="mc">Bestätigen</button>
-</div>
+<canvas id="sigEmp"></canvas>
+<button class="green" onclick="confirmEmp()">Bestätigen</button>
+<button class="red" onclick="clearSig('sigEmp')">Löschen</button>
+<p id="empInfo"></p>
 </div>
 
-<button class="print" onclick="window.print()">Als PDF speichern</button>
+<br>
+<button class="blue" onclick="downloadPDF()">Als PDF speichern</button>
+
 </div>
 
 <script>
-docNr.textContent="LB-"+new Date().toISOString().slice(0,10)+"-"+Math.floor(Math.random()*1000);
+document.getElementById("docNr").innerText="LB-"+Date.now();
 
-// auto jump
-function jump(a,b,l){a.oninput=()=>a.value.length>=l&&b.focus()}
-jump(d,m,2);jump(m,y,2);
-jump(sh,sm,2);jump(sm,eh,2);jump(eh,em,2);
-
-// calc
 function calc(){
-  if(sh.value&&sm.value&&eh.value&&em.value){
-    let s=sh.value*60+ +sm.value;
-    let e=eh.value*60+ +em.value;
-    hours.value=Math.max(0,(e-s)/60).toFixed(2);
-  }
-  travel.value=(km.value*kmrate.value||0).toFixed(2);
-  total.value=((hours.value*rate.value||0)+(+travel.value||0)).toFixed(2);
+let s=document.getElementById("start").value;
+let e=document.getElementById("ende").value;
+if(s&&e){
+let start=new Date("1970-01-01T"+s);
+let end=new Date("1970-01-01T"+e);
+let diff=(end-start)/3600000;
+document.getElementById("stunden").value=diff.toFixed(2);
+}
+let km=document.getElementById("km").value;
+let kmPreis=document.getElementById("kmPreis").value;
+let fahrt=km*kmPreis||0;
+document.getElementById("fahrt").value=fahrt.toFixed(2);
+
+let preis=document.getElementById("preis").value;
+let total=(diff*preis)+fahrt||0;
+document.getElementById("total").value=total.toFixed(2);
 }
 document.querySelectorAll("input").forEach(i=>i.oninput=calc);
 
-// signature
-function sign(c){
-  const x=c.getContext("2d");let d=false;
-  c.onpointerdown=()=>d=true;
-  c.onpointerup=()=>{d=false;x.beginPath()};
-  c.onpointermove=e=>{
-    if(!d)return;
-    let r=c.getBoundingClientRect();
-    x.lineTo(e.clientX-r.left,e.clientY-r.top);
-    x.stroke();x.beginPath();
-    x.moveTo(e.clientX-r.left,e.clientY-r.top);
-  }
+function enable(canvas){
+let c=canvas.getContext("2d");let draw=false;
+canvas.onpointerdown=()=>draw=true;
+canvas.onpointerup=()=>{draw=false;c.beginPath();}
+canvas.onpointermove=e=>{
+if(!draw)return;
+let r=canvas.getBoundingClientRect();
+c.lineTo(e.clientX-r.left,e.clientY-r.top);
+c.stroke();c.beginPath();
+c.moveTo(e.clientX-r.left,e.clientY-r.top);
 }
-sign(sigK);sign(sigM);
+}
+enable(sigClient); enable(sigEmp);
 
-kc.onclick=()=>{sigK.style.pointerEvents="none";kc.disabled=true}
-mc.onclick=()=>{
-  let e=[...document.querySelectorAll(".emp:checked")].map(x=>x.value);
-  if(!e.length)return alert("Mitarbeiter auswählen");
-  empNames.textContent=e.join(" & ");
-  sigM.style.pointerEvents="none";
-  mc.disabled=true;
+function clearSig(id){
+let c=document.getElementById(id).getContext("2d");
+c.clearRect(0,0,300,150);
+}
+
+function confirmClient(){
+sigClient.style.pointerEvents="none";
+clientInfo.innerText="Signé le "+new Date().toLocaleString();
+}
+function confirmEmp(){
+sigEmp.style.pointerEvents="none";
+let emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value).join(", ");
+empInfo.innerText="Signé par "+emps+" le "+new Date().toLocaleString();
+}
+
+function downloadPDF(){
+document.title="LB_"+nachname.value+"_"+vorname.value;
+window.print();
 }
 </script>
+
 </body>
 </html>
