@@ -2,16 +2,38 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Leistungsbestätigung – HJ Cleaning</title>
 
 <style>
-body{margin:0;font-family:system-ui,Arial;background:#f1f5f9}
-.app{max-width:900px;margin:auto;background:#fff;padding:20px;border-radius:18px;box-shadow:0 15px 30px rgba(0,0,0,.1)}
+*{box-sizing:border-box}
 
-.header{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
-.logo{height:70px}
-.company{font-size:14px;line-height:1.4}
+body{
+  margin:0;
+  font-family:system-ui,Arial;
+  background:#f1f5f9;
+}
+
+.app{
+  max-width:900px;
+  width:100%;
+  margin:auto;
+  background:#fff;
+  padding:16px;
+  border-radius:18px;
+  box-shadow:0 15px 30px rgba(0,0,0,.1)
+}
+
+.header{
+  display:flex;
+  gap:15px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.logo{height:70px;max-width:40vw;object-fit:contain}
+
+.company{font-size:14px;line-height:1.4;flex:1}
 
 h1{margin:15px 0 5px;font-size:28px}
 .nr{font-weight:600;margin-bottom:20px}
@@ -19,49 +41,84 @@ h1{margin:15px 0 5px;font-size:28px}
 .section{margin-top:25px}
 .section h2{font-size:18px;border-left:4px solid #22c55e;padding-left:10px;margin-bottom:15px}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:12px;
+}
 
-/* Floating labels */
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+}
+
 .field{position:relative}
+
 .field input,.field textarea{
   width:100%;
   padding:14px 10px 8px;
   border-radius:10px;
   border:1px solid #cbd5e1;
-  font-size:14px;
-  background:#fff
+  font-size:16px;   /* important for iOS zoom */
+  background:#fff;
 }
+
 .field label{
   position:absolute;
-  left:12px;top:12px;
+  left:12px;
+  top:12px;
   color:#6b7280;
   font-size:14px;
   transition:.2s;
   pointer-events:none;
   background:#fff;
-  padding:0 4px
+  padding:0 4px;
 }
+
 .field input:focus+label,
 .field input:not(:placeholder-shown)+label,
 .field textarea:focus+label,
 .field textarea:not(:placeholder-shown)+label{
   top:-8px;
   font-size:12px;
-  color:#22c55e
+  color:#22c55e;
 }
 
-.signature{border:2px dashed #cbd5e1;border-radius:12px;height:160px;touch-action:none;background:#fff}
-.sigbox{background:#f8fafc;padding:10px;border-radius:12px}
+.signature{
+  border:2px dashed #cbd5e1;
+  border-radius:12px;
+  height:160px;
+  touch-action:none;
+  background:#fff;
+}
 
-.sig-actions{display:flex;gap:8px;margin-top:8px}
-button{padding:10px 14px;border:none;border-radius:10px;color:#fff;font-size:14px;cursor:pointer}
+.sigbox{
+  background:#f8fafc;
+  padding:10px;
+  border-radius:12px;
+}
+
+.sig-actions{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+}
+
+button{
+  padding:12px 14px;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+
 .ok{background:#22c55e}
 .del{background:#ef4444}
-.print{background:#2563eb;width:100%;margin-top:20px;font-size:16px}
+.print{background:#2563eb;width:100%;margin-top:20px;font-size:18px}
 
 @media print{
-button,.sig-actions{display:none}
-body{background:#fff}
+  button,.sig-actions{display:none}
+  body{background:#fff}
 }
 </style>
 </head>
@@ -90,10 +147,10 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <div class="section">
 <h2>Kunde</h2>
 <div class="grid">
-<div class="field"><input placeholder=" " id="vorname"><label>Vorname</label></div>
-<div class="field"><input placeholder=" " id="nachname"><label>Nachname</label></div>
-<div class="field"><input placeholder=" " id="telefon"><label>Telefon</label></div>
-<div class="field"><input placeholder=" " id="adresse"><label>Anschrift</label></div>
+<div class="field"><input placeholder=" "><label>Vorname</label></div>
+<div class="field"><input placeholder=" "><label>Nachname</label></div>
+<div class="field"><input placeholder=" "><label>Telefon</label></div>
+<div class="field"><input placeholder=" "><label>Anschrift</label></div>
 </div>
 </div>
 
@@ -147,13 +204,6 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <script>
 nr.innerText="LB-"+Date.now();
 
-// Default date/time
-const now=new Date();
-date.value=now.toISOString().slice(0,10);
-start.value=now.toTimeString().slice(0,5);
-end.value=start.value;
-
-// Calculations
 function calc(){
   if(start.value && end.value){
     let s=new Date("1970-01-01T"+start.value);
@@ -168,9 +218,9 @@ function calc(){
   let h2=+hours.value||0;
   total.value=(h2*r+kmv*kr).toFixed(2);
 }
+
 ["start","end","rate","km","kmrate"].forEach(i=>document.getElementById(i).addEventListener("input",calc));
 
-// Signatures
 function setup(c){
   const ctx=c.getContext("2d");let d=false;
   c.onpointerdown=()=>d=true;
@@ -187,27 +237,15 @@ function setup(c){
 }
 setup(sig1);setup(sig2);
 
-// Kunde
-cConfirm.onclick=()=>{
-  sig1.style.pointerEvents="none";
-  cConfirm.disabled=true;
-  cClear.disabled=true;
-};
-cClear.onclick=()=>{
-  sig1.getContext("2d").clearRect(0,0,sig1.width,sig1.height);
-};
+cConfirm.onclick=()=>{sig1.style.pointerEvents="none";cConfirm.disabled=true;cClear.disabled=true;}
+cClear.onclick=()=>{sig1.getContext("2d").clearRect(0,0,sig1.width,sig1.height);}
 
-// Mitarbeiter
 mConfirm.onclick=()=>{
   let emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value);
   if(!emps.length){alert("Bitte Mitarbeiter auswählen");return;}
-  sig2.style.pointerEvents="none";
-  mConfirm.disabled=true;
-  mClear.disabled=true;
-};
-mClear.onclick=()=>{
-  sig2.getContext("2d").clearRect(0,0,sig2.width,sig2.height);
-};
+  sig2.style.pointerEvents="none";mConfirm.disabled=true;mClear.disabled=true;
+}
+mClear.onclick=()=>{sig2.getContext("2d").clearRect(0,0,sig2.width,sig2.height);}
 </script>
 
 </body>
