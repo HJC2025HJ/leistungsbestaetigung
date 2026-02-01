@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leistungsbestätigung – HJ Cleaning</title>
 
 <style>
@@ -11,30 +11,30 @@ body{margin:0;font-family:system-ui,Arial;background:#f1f5f9}
 
 /* Watermark */
 .watermark{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  z-index:0;
-  pointer-events:none;
-  opacity:0.15;
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+z-index:0;
+pointer-events:none;
+opacity:0.22;
 }
 .watermark img{
-  width:80vw;
-  max-width:700px;
-  filter:grayscale(100%);
+width:80vw;
+max-width:700px;
+filter:grayscale(100%) contrast(120%);
 }
 
 .app{
-  position:relative;
-  z-index:1;
-  max-width:900px;
-  width:100%;
-  margin:auto;
-  background:#fff;
-  padding:16px;
-  border-radius:18px;
-  box-shadow:0 15px 30px rgba(0,0,0,.1)
+position:relative;
+z-index:1;
+max-width:900px;
+width:100%;
+margin:auto;
+background:#fff;
+padding:16px;
+border-radius:18px;
+box-shadow:0 15px 30px rgba(0,0,0,.1)
 }
 
 .header{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
@@ -52,25 +52,27 @@ h1{margin:15px 0 5px;font-size:28px}
 
 /* Floating labels */
 .field{position:relative}
-.field input,.field textarea{
-  width:100%;
-  padding:14px 10px 8px;
-  border-radius:10px;
-  border:1px solid #cbd5e1;
-  font-size:16px;
-  background:#fff;
+.field input,.field textarea,.field select{
+width:100%;
+padding:14px 10px 8px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+font-size:16px;
+background:#fff;
 }
 .field label{
-  position:absolute;left:12px;top:12px;
-  color:#6b7280;font-size:14px;
-  transition:.2s;pointer-events:none;
-  background:#fff;padding:0 4px
+position:absolute;left:12px;top:12px;
+color:#6b7280;font-size:14px;
+transition:.2s;pointer-events:none;
+background:#fff;padding:0 4px
 }
 .field input:focus+label,
 .field input:not(:placeholder-shown)+label,
 .field textarea:focus+label,
-.field textarea:not(:placeholder-shown)+label{
-  top:-8px;font-size:12px;color:#22c55e
+.field textarea:not(:placeholder-shown)+label,
+.field select:focus+label,
+.field select:not([value=""])+label{
+top:-8px;font-size:12px;color:#22c55e
 }
 
 /* Signatures */
@@ -125,8 +127,19 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <h2>Datum & Zeit</h2>
 <div class="grid">
 <div class="field"><input type="date" id="date" placeholder=" "><label>Datum</label></div>
-<div class="field"><input type="time" id="start" placeholder=" "><label>Start</label></div>
-<div class="field"><input type="time" id="end" placeholder=" "><label>Ende</label></div>
+
+<div class="field">
+<select id="startH"></select>
+<select id="startM"></select>
+<label>Start (HH:MM)</label>
+</div>
+
+<div class="field">
+<select id="endH"></select>
+<select id="endM"></select>
+<label>Ende (HH:MM)</label>
+</div>
+
 </div>
 </div>
 
@@ -173,56 +186,65 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 nr.innerText="LB-"+Date.now();
 const empCountInput=document.getElementById("empCount");
 
+// Generate time selects
+function fillTime(sel,max){
+for(let i=0;i<=max;i++){
+let v=i.toString().padStart(2,"0");
+let o=document.createElement("option");
+o.value=v;o.text=v;sel.appendChild(o);
+}
+}
+fillTime(startH,23);fillTime(endH,23);
+fillTime(startM,59);fillTime(endM,59);
+
 function calc(){
-  let empCount=document.querySelectorAll(".emp:checked").length;
-  if(empCount===0) empCount=1;
-  empCountInput.value=empCount;
+let empCount=document.querySelectorAll(".emp:checked").length;
+if(empCount===0) empCount=1;
+empCountInput.value=empCount;
 
-  if(start.value && end.value){
-    let s=new Date("1970-01-01T"+start.value);
-    let e=new Date("1970-01-01T"+end.value);
-    let base=(e-s)/3600000;
-    let totalHours=base*empCount;
-    hours.value=totalHours>0?totalHours.toFixed(2):"";
-  }
-
-  let kmv=+km.value||0;
-  let kr=+kmrate.value||0;
-  travel.value=(kmv*kr).toFixed(2);
-
-  let r=+rate.value||0;
-  let h2=+hours.value||0;
-  total.value=(h2*r+kmv*kr).toFixed(2);
+if(startH.value!=="" && startM.value!=="" && endH.value!=="" && endM.value!==""){
+let s=parseInt(startH.value)*60+parseInt(startM.value);
+let e=parseInt(endH.value)*60+parseInt(endM.value);
+let base=(e-s)/60;
+let totalHours=base*empCount;
+hours.value=totalHours>0?totalHours.toFixed(2):"";
 }
 
-["start","end","rate","km","kmrate"].forEach(i=>document.getElementById(i).addEventListener("input",calc));
+let kmv=+km.value||0;
+let kr=+kmrate.value||0;
+travel.value=(kmv*kr).toFixed(2);
+
+let r=+rate.value||0;
+let h2=+hours.value||0;
+total.value=(h2*r+kmv*kr).toFixed(2);
+}
+
+["startH","startM","endH","endM","rate","km","kmrate"].forEach(i=>document.getElementById(i).addEventListener("change",calc));
 document.querySelectorAll(".emp").forEach(e=>e.addEventListener("change",calc));
 
 function setup(c){
-  const ctx=c.getContext("2d");let d=false;
-  c.onpointerdown=()=>d=true;
-  c.onpointerup=()=>{d=false;ctx.beginPath()};
-  c.onpointermove=e=>{
-    if(!d)return;
-    let r=c.getBoundingClientRect();
-    ctx.lineWidth=2;
-    ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
-  };
+const ctx=c.getContext("2d");let d=false;
+c.onpointerdown=()=>d=true;
+c.onpointerup=()=>{d=false;ctx.beginPath()};
+c.onpointermove=e=>{
+if(!d)return;
+let r=c.getBoundingClientRect();
+ctx.lineWidth=2;
+ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+};
 }
 setup(sig1);setup(sig2);
 
-// Kunde
 cConfirm.onclick=()=>{sig1.style.pointerEvents="none";cConfirm.disabled=true;cClear.disabled=true;}
 cClear.onclick=()=>{sig1.getContext("2d").clearRect(0,0,sig1.width,sig1.height);}
 
-// Mitarbeiter
 mConfirm.onclick=()=>{
-  let emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value);
-  if(!emps.length){alert("Bitte Mitarbeiter auswählen");return;}
-  sig2.style.pointerEvents="none";mConfirm.disabled=true;mClear.disabled=true;
+let emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value);
+if(!emps.length){alert("Bitte Mitarbeiter auswählen");return;}
+sig2.style.pointerEvents="none";mConfirm.disabled=true;mClear.disabled=true;
 }
 mClear.onclick=()=>{sig2.getContext("2d").clearRect(0,0,sig2.width,sig2.height);}
 </script>
