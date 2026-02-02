@@ -2,251 +2,268 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Leistungsbestätigung – HJ Cleaning</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,Arial;background:#f1f5f9}
-
-/* Watermark */
+:root{
+  --green:#22c55e;
+  --border:#d1d5db;
+}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  background:#eef2f3;
+}
+.app{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  position:relative;
+}
+.form{
+  background:#fff;
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  position:relative;
+  z-index:2;
+}
 .watermark{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-z-index:0;
-pointer-events:none;
-opacity:0.22;
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:1;
+  pointer-events:none;
 }
 .watermark img{
-width:80vw;
-max-width:700px;
-filter:grayscale(100%) contrast(120%);
+  width:70%;
+  opacity:.22;
+  filter:grayscale(100%) contrast(120%);
 }
 
-.app{
-position:relative;
-z-index:1;
-max-width:900px;
-width:100%;
-margin:auto;
-background:#fff;
-padding:16px;
-border-radius:18px;
-box-shadow:0 15px 30px rgba(0,0,0,.1)
+.header{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  border-bottom:2px solid #e5e7eb;
+  padding-bottom:15px;
+}
+.logo{height:80px}
+
+h1{margin:20px 0 10px}
+.section{margin-top:30px}
+.section h3{
+  border-left:5px solid var(--green);
+  padding-left:10px;
 }
 
-.header{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
-.logo{height:70px;max-width:40vw;object-fit:contain}
-.company{font-size:14px;line-height:1.4;flex:1}
-
-h1{margin:15px 0 5px;font-size:28px}
-.nr{font-weight:600;margin-bottom:20px}
-
-.section{margin-top:25px}
-.section h2{font-size:18px;border-left:4px solid #22c55e;padding-left:10px;margin-bottom:15px}
-
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-@media(max-width:600px){.grid{grid-template-columns:1fr}}
-
-/* Floating labels */
-.field{position:relative}
-.field input,.field textarea,.field select{
-width:100%;
-padding:14px 10px 8px;
-border-radius:10px;
-border:1px solid #cbd5e1;
-font-size:16px;
-background:#fff;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+  margin-top:10px;
 }
-.field label{
-position:absolute;left:12px;top:12px;
-color:#6b7280;font-size:14px;
-transition:.2s;pointer-events:none;
-background:#fff;padding:0 4px
-}
-.field input:focus+label,
-.field input:not(:placeholder-shown)+label,
-.field textarea:focus+label,
-.field textarea:not(:placeholder-shown)+label,
-.field select:focus+label,
-.field select:not([value=""])+label{
-top:-8px;font-size:12px;color:#22c55e
+label{font-weight:600}
+input,select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-size:15px;
 }
 
-/* Signatures */
-.signature{border:2px dashed #cbd5e1;border-radius:12px;height:160px;touch-action:none;background:#fff}
-.sigbox{background:#f8fafc;padding:10px;border-radius:12px}
-.sig-actions{display:flex;gap:8px;margin-top:8px}
+.hours{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
 
-button{padding:12px 14px;border:none;border-radius:10px;color:#fff;font-size:16px;cursor:pointer}
-.ok{background:#22c55e}
-.del{background:#ef4444}
-.print{background:#2563eb;width:100%;margin-top:20px;font-size:18px}
+.signatures{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+@media(max-width:700px){
+  .signatures{grid-template-columns:1fr}
+}
 
-@media print{button,.sig-actions{display:none}body{background:#fff}}
+canvas{
+  width:100%;
+  height:160px;
+  border:2px dashed #aaa;
+  border-radius:12px;
+  background:#fff;
+}
+
+.sig-actions{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+button{
+  padding:12px 16px;
+  border:none;
+  border-radius:12px;
+  color:#fff;
+  font-size:15px;
+}
+.green{background:#22c55e}
+.red{background:#ef4444}
+.blue{background:#2563eb;width:100%;font-size:18px}
+
+@media print{
+  button,.sig-actions{display:none}
+  body{background:#fff}
+  .form{box-shadow:none}
+}
 </style>
 </head>
 
 <body>
-
-<div class="watermark"><img src="HJ_Clean.png"></div>
-
 <div class="app">
 
-<div class="header">
-<img src="HJ_Clean.png" class="logo">
-<div class="company">
-Cleaning – Marke von HJ Corporate GbR<br>
-Stauseestraße 27b, 54317 Riveris<br>
-Tel. +49 176 87898900 · info@hjcorporate.de
+<div class="watermark">
+  <img src="HJ_Clean.png">
 </div>
+
+<div class="form">
+
+<div class="header">
+  <img src="HJ_Clean.png" class="logo">
+  <div>
+    <b>Cleaning – Marke von HJ Corporate GbR</b><br>
+    Stauseestraße 27b, 54317 Riveris<br>
+    Tel. +49 176 87898900 · info@hjcorporate.de
+  </div>
 </div>
 
 <h1>Leistungsbestätigung</h1>
-<div class="nr">Nr: <span id="nr"></span></div>
+<div>Nr: <b id="doc"></b></div>
 
+<!-- Mitarbeiter -->
 <div class="section">
-<h2>Mitarbeiter</h2>
-<label><input type="checkbox" value="Hervé Mbarga" class="emp"> Hervé Mbarga</label><br>
-<label><input type="checkbox" value="Jacky Massing" class="emp"> Jacky Massing</label>
+<h3>Mitarbeiter</h3>
+<label><input type="checkbox" class="emp" value="Hervé Mbarga"> Hervé Mbarga</label>
+<label><input type="checkbox" class="emp" value="Jacky Massing"> Jacky Massing</label>
 </div>
 
+<!-- Kunde -->
 <div class="section">
-<h2>Kunde</h2>
+<h3>Kunde</h3>
 <div class="grid">
-<div class="field"><input id="vorname" placeholder=" "><label>Vorname</label></div>
-<div class="field"><input id="nachname" placeholder=" "><label>Nachname</label></div>
-<div class="field"><input id="telefon" placeholder=" "><label>Telefon</label></div>
-<div class="field"><input id="adresse" placeholder=" "><label>Anschrift</label></div>
+<input placeholder="Vorname">
+<input placeholder="Nachname">
+<input placeholder="Telefon">
+<input placeholder="Anschrift">
 </div>
 </div>
 
+<!-- Zeit -->
 <div class="section">
-<h2>Datum & Zeit</h2>
+<h3>Datum & Zeit</h3>
 <div class="grid">
-<div class="field"><input type="date" id="date" placeholder=" "><label>Datum</label></div>
-
-<div class="field">
-<select id="startH"></select>
-<select id="startM"></select>
-<label>Start (HH:MM)</label>
+<input type="date" id="date">
+<div class="hours">
+<select id="sh"></select><select id="sm"></select>
 </div>
-
-<div class="field">
-<select id="endH"></select>
-<select id="endM"></select>
-<label>Ende (HH:MM)</label>
+<div class="hours">
+<select id="eh"></select><select id="em"></select>
 </div>
-
 </div>
 </div>
 
+<!-- Berechnung -->
 <div class="section">
-<h2>Berechnung</h2>
+<h3>Berechnung</h3>
 <div class="grid">
-<div class="field"><input id="empCount" readonly placeholder=" "><label>Anzahl Mitarbeiter</label></div>
-<div class="field"><input id="hours" readonly placeholder=" "><label>Arbeitsstunden</label></div>
-<div class="field"><input id="rate" placeholder=" "><label>€ / Stunde</label></div>
-<div class="field"><input id="km" placeholder=" "><label>Kilometer</label></div>
-<div class="field"><input id="kmrate" placeholder=" "><label>€ / KM</label></div>
-<div class="field"><input id="travel" readonly placeholder=" "><label>Anfahrtkosten €</label></div>
-<div class="field"><input id="total" readonly placeholder=" "><label>Gesamtbetrag €</label></div>
+<input id="count" readonly placeholder="Anzahl Mitarbeiter">
+<input id="hours" readonly placeholder="Arbeitsstunden">
+<input id="rate" placeholder="€/Stunde">
+<input id="km" placeholder="KM">
+<input id="kmrate" placeholder="€/KM">
+<input id="travel" readonly placeholder="Anfahrtkosten €">
+<input id="total" readonly placeholder="Gesamtbetrag €">
 </div>
 </div>
 
+<!-- Signatures -->
 <div class="section">
-<h2>Unterschriften</h2>
-<div class="grid">
-<div class="sigbox">
-<strong>Kunde</strong>
-<canvas id="sig1" class="signature"></canvas>
+<h3>Unterschriften</h3>
+<div class="signatures">
+<div>
+<b>Kunde</b>
+<canvas id="c1"></canvas>
 <div class="sig-actions">
-<button class="ok" id="cConfirm">Bestätigen</button>
-<button class="del" id="cClear">Löschen</button>
+<button class="green" onclick="lock(c1)">Bestätigen</button>
+<button class="red" onclick="clearC(c1)">Löschen</button>
 </div>
 </div>
 
-<div class="sigbox">
-<strong>Mitarbeiter</strong>
-<canvas id="sig2" class="signature"></canvas>
+<div>
+<b>Mitarbeiter</b>
+<canvas id="c2"></canvas>
 <div class="sig-actions">
-<button class="ok" id="mConfirm">Bestätigen</button>
-<button class="del" id="mClear">Löschen</button>
+<button class="green" onclick="lock(c2)">Bestätigen</button>
+<button class="red" onclick="clearC(c2)">Löschen</button>
+</div>
 </div>
 </div>
 </div>
 
-<button class="print" onclick="window.print()">Als PDF speichern / drucken</button>
+<button class="blue" onclick="window.print()">Als PDF speichern / drucken</button>
 
+</div>
 </div>
 
 <script>
-nr.innerText="LB-"+Date.now();
-const empCountInput=document.getElementById("empCount");
+document.getElementById("doc").innerText="LB-"+Date.now();
 
-// Generate time selects
-function fillTime(sel,max){
-for(let i=0;i<=max;i++){
-let v=i.toString().padStart(2,"0");
-let o=document.createElement("option");
-o.value=v;o.text=v;sel.appendChild(o);
+// populate time
+for(let i=0;i<24;i++){
+  sh.add(new Option(String(i).padStart(2,"0"),i));
+  eh.add(new Option(String(i).padStart(2,"0"),i));
 }
+for(let i=0;i<60;i++){
+  sm.add(new Option(String(i).padStart(2,"0"),i));
+  em.add(new Option(String(i).padStart(2,"0"),i));
 }
-fillTime(startH,23);fillTime(endH,23);
-fillTime(startM,59);fillTime(endM,59);
 
 function calc(){
-let empCount=document.querySelectorAll(".emp:checked").length;
-if(empCount===0) empCount=1;
-empCountInput.value=empCount;
-
-if(startH.value!=="" && startM.value!=="" && endH.value!=="" && endM.value!==""){
-let s=parseInt(startH.value)*60+parseInt(startM.value);
-let e=parseInt(endH.value)*60+parseInt(endM.value);
-let base=(e-s)/60;
-let totalHours=base*empCount;
-hours.value=totalHours>0?totalHours.toFixed(2):"";
+  const s = sh.value*60+Number(sm.value);
+  const e = eh.value*60+Number(em.value);
+  let diff=(e-s)/60; if(diff<0) diff=0;
+  const emp=document.querySelectorAll(".emp:checked").length;
+  count.value=emp;
+  const hoursTot=diff*emp;
+  hours.value=hoursTot.toFixed(2);
+  const travel=km.value*kmrate.value||0;
+  travel.value=travel.toFixed(2);
+  total.value=((hoursTot*rate.value||0)+travel).toFixed(2);
 }
 
-let kmv=+km.value||0;
-let kr=+kmrate.value||0;
-travel.value=(kmv*kr).toFixed(2);
+document.querySelectorAll("select,input").forEach(x=>x.oninput=calc);
 
-let r=+rate.value||0;
-let h2=+hours.value||0;
-total.value=(h2*r+kmv*kr).toFixed(2);
+function enable(c){
+  const ctx=c.getContext("2d");let d=false;
+  c.onpointerdown=()=>d=true;
+  c.onpointerup=()=>{d=false;ctx.beginPath()}
+  c.onpointermove=e=>{
+    if(!d)return;
+    const r=c.getBoundingClientRect();
+    ctx.lineWidth=2;
+    ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+  }
 }
+enable(c1); enable(c2);
 
-["startH","startM","endH","endM","rate","km","kmrate"].forEach(i=>document.getElementById(i).addEventListener("change",calc));
-document.querySelectorAll(".emp").forEach(e=>e.addEventListener("change",calc));
-
-function setup(c){
-const ctx=c.getContext("2d");let d=false;
-c.onpointerdown=()=>d=true;
-c.onpointerup=()=>{d=false;ctx.beginPath()};
-c.onpointermove=e=>{
-if(!d)return;
-let r=c.getBoundingClientRect();
-ctx.lineWidth=2;
-ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
-ctx.stroke();
-ctx.beginPath();
-ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
-};
-}
-setup(sig1);setup(sig2);
-
-cConfirm.onclick=()=>{sig1.style.pointerEvents="none";cConfirm.disabled=true;cClear.disabled=true;}
-cClear.onclick=()=>{sig1.getContext("2d").clearRect(0,0,sig1.width,sig1.height);}
-
-mConfirm.onclick=()=>{
-let emps=[...document.querySelectorAll(".emp:checked")].map(e=>e.value);
-if(!emps.length){alert("Bitte Mitarbeiter auswählen");return;}
-sig2.style.pointerEvents="none";mConfirm.disabled=true;mClear.disabled=true;
-}
-mClear.onclick=()=>{sig2.getContext("2d").clearRect(0,0,sig2.width,sig2.height);}
+function clearC(c){c.getContext("2d").clearRect(0,0,c.width,c.height);}
+function lock(c){c.style.pointerEvents="none";}
 </script>
 
 </body>
