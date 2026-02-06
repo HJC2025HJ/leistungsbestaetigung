@@ -159,11 +159,40 @@ body{
 padding:0;
 background:#fff;
 }
+@media print{
+html, body{
+height:100%;
+overflow:hidden;
+}
+
+body{
+padding:0;
+background:#fff;
+}
+
 .container{
-width:210mm;
-min-height:297mm;
+width:100%;
+height:auto;
+max-height:100%;
 padding:10mm;
 border-radius:0;
+page-break-inside:avoid;
+}
+
+.content,
+.signatures,
+.sig-box{
+page-break-inside:avoid;
+}
+
+button,
+.sig-actions{
+display:none !important;
+}
+
+.watermark{
+opacity:0.08;
+}
 }
 button,.sig-actions{display:none!important}
 .watermark{opacity:0.08}
