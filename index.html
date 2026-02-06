@@ -2,269 +2,301 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Leistungsbestätigung – HJ Cleaning</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leistungsbestätigung</title>
 
 <style>
-:root{
-  --green:#22c55e;
-  --border:#d1d5db;
-}
+/* ===== BASE ===== */
+* { box-sizing: border-box; }
+
 body{
-  margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background:#eef2f3;
+margin:0;
+padding:16px;
+font-family: Arial, Helvetica, sans-serif;
+background:#eef2f3;
 }
-.app{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-  position:relative;
+
+.container{
+max-width:1200px;
+margin:auto;
+background:#fff;
+padding:24px;
+border-radius:14px;
+position:relative;
+overflow:hidden;
 }
-.form{
-  background:#fff;
-  padding:25px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
-  position:relative;
-  z-index:2;
-}
+
+/* ===== WATERMARK ===== */
 .watermark{
-  position:absolute;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:1;
-  pointer-events:none;
-}
-.watermark img{
-  width:70%;
-  opacity:.22;
-  filter:grayscale(100%) contrast(120%);
+position:absolute;
+inset:0;
+background:url("HJ_Clean.png") center / 65% no-repeat;
+opacity:0.18;
+pointer-events:none;
+z-index:0;
 }
 
+.content{ position:relative; z-index:1; }
+
+/* ===== HEADER ===== */
 .header{
-  display:flex;
-  gap:20px;
-  align-items:center;
-  border-bottom:2px solid #e5e7eb;
-  padding-bottom:15px;
+display:flex;
+flex-wrap:wrap;
+gap:16px;
+align-items:center;
+border-bottom:2px solid #e5e7eb;
+padding-bottom:12px;
 }
-.logo{height:80px}
+.logo{ max-width:140px; }
+.company{ font-size:14px; line-height:1.4; }
 
-h1{margin:20px 0 10px}
-.section{margin-top:30px}
-.section h3{
-  border-left:5px solid var(--green);
-  padding-left:10px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:16px;
-  margin-top:10px;
-}
-label{font-weight:600}
-input,select{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  font-size:15px;
+h1{
+text-align:center;
+margin:20px 0 10px;
 }
 
-.hours{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
+/* ===== SECTIONS ===== */
+.section-title{
+margin:24px 0 8px;
+font-weight:700;
+color:#111;
+border-left:4px solid #22c55e;
+padding-left:10px;
 }
 
+/* ===== GRID SYSTEM ===== */
+.form-grid{
+display:grid;
+gap:16px;
+}
+
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+
+@media(max-width:1024px){
+.grid-4,.grid-3{ grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:640px){
+.grid-4,.grid-3,.grid-2{ grid-template-columns:1fr; }
+}
+
+/* ===== FIELDS ===== */
+.field label{
+display:block;
+font-size:13px;
+font-weight:600;
+margin-bottom:4px;
+}
+
+input, select{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #d1d5db;
+font-size:14px;
+}
+
+/* ===== TIME BLOCK ===== */
+.time-group{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+}
+
+.time-group small{
+display:block;
+font-size:12px;
+color:#6b7280;
+margin-bottom:2px;
+}
+
+/* ===== SIGNATURES ===== */
 .signatures{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:24px;
 }
+
 @media(max-width:700px){
-  .signatures{grid-template-columns:1fr}
+.signatures{ grid-template-columns:1fr; }
+}
+
+.signature-box{
+border:1px dashed #9ca3af;
+border-radius:10px;
+padding:12px;
 }
 
 canvas{
-  width:100%;
-  height:160px;
-  border:2px dashed #aaa;
-  border-radius:12px;
-  background:#fff;
+width:100%;
+height:160px;
+border:1px dashed #9ca3af;
+border-radius:8px;
+touch-action:none;
 }
 
-.sig-actions{
-  display:flex;
-  gap:10px;
-  margin-top:10px;
+/* ===== BUTTON ===== */
+.print-btn{
+margin-top:32px;
+width:100%;
+padding:14px;
+font-size:16px;
+background:#2563eb;
+color:#fff;
+border:none;
+border-radius:10px;
+cursor:pointer;
 }
-button{
-  padding:12px 16px;
-  border:none;
-  border-radius:12px;
-  color:#fff;
-  font-size:15px;
-}
-.green{background:#22c55e}
-.red{background:#ef4444}
-.blue{background:#2563eb;width:100%;font-size:18px}
 
+/* ===== PRINT ===== */
 @media print{
-  button,.sig-actions{display:none}
-  body{background:#fff}
-  .form{box-shadow:none}
+body{ background:#fff; padding:0; }
+.print-btn{ display:none; }
+.container{ page-break-inside:avoid; }
 }
 </style>
 </head>
 
 <body>
-<div class="app">
+<div class="container">
+<div class="watermark"></div>
+<div class="content">
 
-<div class="watermark">
-  <img src="HJ_Clean.png">
-</div>
-
-<div class="form">
-
+<!-- HEADER -->
 <div class="header">
-  <img src="HJ_Clean.png" class="logo">
-  <div>
-    <b>Cleaning – Marke von HJ Corporate GbR</b><br>
-    Stauseestraße 27b, 54317 Riveris<br>
-    Tel. +49 176 87898900 · info@hjcorporate.de
-  </div>
+<img src="HJ_Clean.png" class="logo">
+<div class="company">
+<strong>Cleaning – Marke von HJ Corporate GbR</strong><br>
+Stauseestraße 27b, 54317 Riveris<br>
+Tel. +49 176 87898900 · info@hjcorporate.de
+</div>
 </div>
 
 <h1>Leistungsbestätigung</h1>
-<div>Nr: <b id="doc"></b></div>
+<div>Nr.: <strong id="docNr"></strong></div>
 
-<!-- Mitarbeiter -->
-<div class="section">
-<h3>Mitarbeiter</h3>
-<label><input type="checkbox" class="emp" value="Hervé Mbarga"> Hervé Mbarga</label>
-<label><input type="checkbox" class="emp" value="Jacky Massing"> Jacky Massing</label>
+<!-- MITARBEITER -->
+<div class="section-title">Mitarbeiter</div>
+<label><input type="checkbox" class="emp"> Hervé Mbarga</label>
+<label><input type="checkbox" class="emp"> Jacky Massing</label>
+
+<!-- KUNDE -->
+<div class="section-title">Kunde</div>
+<div class="form-grid grid-4">
+<div class="field"><label>Vorname</label><input></div>
+<div class="field"><label>Nachname</label><input></div>
+<div class="field"><label>Telefon</label><input></div>
+<div class="field"><label>Anschrift</label><input></div>
 </div>
 
-<!-- Kunde -->
-<div class="section">
-<h3>Kunde</h3>
-<div class="grid">
-<input placeholder="Vorname">
-<input placeholder="Nachname">
-<input placeholder="Telefon">
-<input placeholder="Anschrift">
-</div>
-</div>
-
-<!-- Zeit -->
-<div class="section">
-<h3>Datum & Zeit</h3>
-<div class="grid">
+<!-- DATE & TIME -->
+<div class="section-title">Datum & Zeit</div>
+<div class="form-grid grid-3">
+<div class="field">
+<label>Datum</label>
 <input type="date" id="date">
-<div class="hours">
-<select id="sh"></select><select id="sm"></select>
 </div>
-<div class="hours">
-<select id="eh"></select><select id="em"></select>
+
+<div class="field">
+<label>Beginn</label>
+<small>Stunde / Minute</small>
+<div class="time-group">
+<select id="sh"></select>
+<select id="sm"></select>
+</div>
+</div>
+
+<div class="field">
+<label>Ende</label>
+<small>Stunde / Minute</small>
+<div class="time-group">
+<select id="eh"></select>
+<select id="em"></select>
 </div>
 </div>
 </div>
 
-<!-- Berechnung -->
-<div class="section">
-<h3>Berechnung</h3>
-<div class="grid">
-<input id="count" readonly placeholder="Anzahl Mitarbeiter">
-<input id="hours" readonly placeholder="Arbeitsstunden">
-<input id="rate" placeholder="€/Stunde">
-<input id="km" placeholder="KM">
-<input id="kmrate" placeholder="€/KM">
-<input id="travel" readonly placeholder="Anfahrtkosten €">
-<input id="total" readonly placeholder="Gesamtbetrag €">
-</div>
+<!-- BERECHNUNG -->
+<div class="section-title">Berechnung</div>
+<div class="form-grid grid-4">
+<div class="field"><label>Anzahl Mitarbeiter</label><input id="empCount" readonly></div>
+<div class="field"><label>Arbeitsstunden</label><input id="hours" readonly></div>
+<div class="field"><label>€/Stunde</label><input id="rate" type="number"></div>
+<div class="field"><label>Kilometer</label><input id="km" type="number"></div>
+<div class="field"><label>€/KM</label><input id="kmRate" type="number"></div>
+<div class="field"><label>Gesamtbetrag €</label><input id="total" readonly></div>
 </div>
 
-<!-- Signatures -->
-<div class="section">
-<h3>Unterschriften</h3>
+<!-- SIGNATURES -->
+<div class="section-title">Unterschriften</div>
 <div class="signatures">
-<div>
-<b>Kunde</b>
-<canvas id="c1"></canvas>
-<div class="sig-actions">
-<button class="green" onclick="lock(c1)">Bestätigen</button>
-<button class="red" onclick="clearC(c1)">Löschen</button>
+<div class="signature-box">
+<strong>Kunde</strong>
+<canvas id="sig1"></canvas>
+</div>
+<div class="signature-box">
+<strong>Mitarbeiter</strong>
+<canvas id="sig2"></canvas>
 </div>
 </div>
 
-<div>
-<b>Mitarbeiter</b>
-<canvas id="c2"></canvas>
-<div class="sig-actions">
-<button class="green" onclick="lock(c2)">Bestätigen</button>
-<button class="red" onclick="clearC(c2)">Löschen</button>
-</div>
-</div>
-</div>
-</div>
-
-<button class="blue" onclick="window.print()">Als PDF speichern / drucken</button>
+<button class="print-btn" onclick="window.print()">Als PDF speichern / drucken</button>
 
 </div>
 </div>
 
 <script>
-document.getElementById("doc").innerText="LB-"+Date.now();
+/* DOC NUMBER */
+document.getElementById("docNr").innerText =
+"LB-" + Date.now();
 
-// populate time
-for(let i=0;i<24;i++){
-  sh.add(new Option(String(i).padStart(2,"0"),i));
-  eh.add(new Option(String(i).padStart(2,"0"),i));
+/* TIME SELECTS */
+function fill(sel,max){
+for(let i=0;i<=max;i++){
+let o=document.createElement("option");
+o.value=o.text=String(i).padStart(2,"0");
+sel.appendChild(o);
 }
-for(let i=0;i<60;i++){
-  sm.add(new Option(String(i).padStart(2,"0"),i));
-  em.add(new Option(String(i).padStart(2,"0"),i));
 }
+["sh","eh"].forEach(id=>fill(document.getElementById(id),23));
+["sm","em"].forEach(id=>fill(document.getElementById(id),59));
 
+/* CALC */
+const emps=document.querySelectorAll(".emp");
 function calc(){
-  const s = sh.value*60+Number(sm.value);
-  const e = eh.value*60+Number(em.value);
-  let diff=(e-s)/60; if(diff<0) diff=0;
-  const emp=document.querySelectorAll(".emp:checked").length;
-  count.value=emp;
-  const hoursTot=diff*emp;
-  hours.value=hoursTot.toFixed(2);
-  const travel=km.value*kmrate.value||0;
-  travel.value=travel.toFixed(2);
-  total.value=((hoursTot*rate.value||0)+travel).toFixed(2);
+let ec=[...emps].filter(e=>e.checked).length;
+empCount.value=ec;
+
+let sh=+sh.value, sm=+sm.value;
+let eh=+eh.value, em=+em.value;
+
+let h=((eh*60+em)-(sh*60+sm))/60;
+if(h<0) h=0;
+
+let totalHours=h*ec;
+hours.value=totalHours.toFixed(2);
+
+let total=(totalHours*(+rate.value||0)) + ((+km.value||0)*(+kmRate.value||0));
+total.value=total.toFixed(2);
 }
+document.querySelectorAll("input,select").forEach(e=>e.addEventListener("change",calc));
 
-document.querySelectorAll("select,input").forEach(x=>x.oninput=calc);
-
-function enable(c){
-  const ctx=c.getContext("2d");let d=false;
-  c.onpointerdown=()=>d=true;
-  c.onpointerup=()=>{d=false;ctx.beginPath()}
-  c.onpointermove=e=>{
-    if(!d)return;
-    const r=c.getBoundingClientRect();
-    ctx.lineWidth=2;
-    ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
-  }
+/* SIGN */
+function sign(canvas){
+let ctx=canvas.getContext("2d"), d=false;
+canvas.addEventListener("pointerdown",()=>d=true);
+canvas.addEventListener("pointerup",()=>{d=false;ctx.beginPath()});
+canvas.addEventListener("pointermove",e=>{
+if(!d) return;
+let r=canvas.getBoundingClientRect();
+ctx.lineWidth=2;ctx.lineCap="round";
+ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+ctx.stroke();ctx.beginPath();
+ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+});
 }
-enable(c1); enable(c2);
-
-function clearC(c){c.getContext("2d").clearRect(0,0,c.width,c.height);}
-function lock(c){c.style.pointerEvents="none";}
+sign(sig1); sign(sig2);
 </script>
-
 </body>
 </html>
