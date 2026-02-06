@@ -6,136 +6,163 @@
 <title>Leistungsbestätigung</title>
 
 <style>
-:root{
---green:#2ecc71;
---gray:#f2f2f2;
---border:#dcdcdc;
-}
-
-*{box-sizing:border-box;}
-
-html,body{
+*{box-sizing:border-box}
+body{
 margin:0;
-padding:0;
-background:#eef3f0;
+padding:16px;
 font-family:Arial,Helvetica,sans-serif;
+background:#eef2f3;
 }
 
 .container{
-width:210mm;
-height:297mm;
+max-width:1200px;
 margin:auto;
-background:white;
-padding:10mm;
+background:#fff;
+border-radius:14px;
+padding:24px;
 position:relative;
 overflow:hidden;
 }
 
-/* ===== WATERMARK ===== */
+/* ===== FILIGRANE ===== */
 .watermark{
 position:absolute;
 inset:0;
-background:url("HJ_Clean.png") center/80% no-repeat;
-opacity:0.08;
-pointer-events:none; /* 🔒 N’INTERFÈRE PLUS */
+background:url("HJ_Clean.png") center/70% no-repeat;
+opacity:0.12;
+pointer-events:none;
+z-index:0;
 }
 
-/* ===== TITLES ===== */
-h1{text-align:center;margin:10px 0;}
+/* ===== CONTENU ===== */
+.content{position:relative;z-index:1}
+
+.header{
+display:flex;
+gap:20px;
+align-items:center;
+flex-wrap:wrap;
+}
+.header img{max-width:150px}
+.header .info{font-size:14px}
+
+h1{text-align:center;margin:20px 0}
 .section-title{
-margin-top:12px;
+margin-top:26px;
 font-weight:bold;
-border-left:4px solid var(--green);
-padding-left:8px;
+border-left:5px solid #22c55e;
+padding-left:10px;
 }
 
-/* ===== GRID ===== */
+/* ===== GRILLES ===== */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:10px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:14px;
+margin-top:12px;
 }
 
-/* ===== FLOATING LABELS ===== */
-.field{
-position:relative;
+.field label{
+display:block;
+font-size:13px;
+margin-bottom:4px;
+font-weight:600;
 }
+
 .field input,
 .field select{
 width:100%;
-padding:14px 10px 6px;
-border:1px solid var(--border);
+padding:10px;
 border-radius:8px;
-background:#fafafa;
-}
-.field label{
-position:absolute;
-left:10px;
-top:50%;
-transform:translateY(-50%);
-font-size:13px;
-color:#777;
-background:white;
-padding:0 4px;
-pointer-events:none;
-transition:.2s;
-}
-.field input:focus+label,
-.field input:not(:placeholder-shown)+label,
-.field select:focus+label{
-top:2px;
-font-size:11px;
-color:var(--green);
+border:1px solid #ccc;
+font-size:14px;
 }
 
-/* ===== MITARBEITER ===== */
-.checkbox{
+/* ===== EMPLOYÉS ===== */
+.employee-list label{
 display:flex;
 align-items:center;
+gap:8px;
+margin:6px 0;
+}
+
+/* ===== HEURES ===== */
+.time-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+.time-box{
+border:1px solid #ddd;
+border-radius:10px;
+padding:10px;
+}
+.time-box strong{display:block;margin-bottom:6px}
+.time-row{
+display:grid;
+grid-template-columns:1fr 1fr;
 gap:8px;
 }
 
 /* ===== SIGNATURE ===== */
-.signature-box{
-border:2px dashed #bbb;
-border-radius:8px;
-height:120px;
-position:relative;
+.signatures{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+margin-top:20px;
 }
-.signature-box canvas{
+@media(max-width:700px){
+.signatures{grid-template-columns:1fr}
+}
+
+.sig-box{
+border:1px dashed #aaa;
+border-radius:10px;
+padding:10px;
+}
+canvas{
 width:100%;
-height:100%;
+height:160px;
+border:2px dashed #999;
+border-radius:8px;
 touch-action:none;
+background:#fff;
 }
 .sig-actions{
+margin-top:8px;
 display:flex;
-gap:10px;
-margin-top:6px;
+gap:8px;
 }
-.sig-actions button{
-flex:1;
-padding:6px;
+button{
+padding:10px 14px;
 border:none;
-color:white;
-border-radius:6px;
+border-radius:8px;
+cursor:pointer;
+color:#fff;
 }
-.btn-ok{background:#2ecc71;}
-.btn-del{background:#e74c3c;}
-.btn-del[disabled]{opacity:.4}
+.confirm{background:#22c55e}
+.delete{background:#ef4444}
+.print{
+margin-top:30px;
+width:100%;
+background:#2563eb;
+font-size:16px;
+}
 
 /* ===== PRINT ===== */
 @media print{
-html,body{
-width:210mm;
-height:297mm;
-overflow:hidden;
+body{
+padding:0;
+background:#fff;
 }
 .container{
 width:210mm;
-height:297mm;
-overflow:hidden;
+min-height:297mm;
+padding:10mm;
+border-radius:0;
 }
-button{display:none!important;}
+button,.sig-actions{display:none!important}
+.watermark{opacity:0.08}
 }
 </style>
 </head>
@@ -144,109 +171,116 @@ button{display:none!important;}
 <div class="container">
 <div class="watermark"></div>
 
+<div class="content">
+<div class="header">
+<img src="HJ_Clean.png" alt="Logo">
+<div class="info">
+<strong>Cleaning – Marke von HJ Corporate GbR</strong><br>
+Stauseestraße 27b, 54317 Riveris<br>
+Tel. +49 176 87898900 · info@hjcorporate.de
+</div>
+</div>
+
 <h1>Leistungsbestätigung</h1>
 
+<!-- MITARBEITER -->
 <div class="section-title">Mitarbeiter</div>
-<div class="grid">
-<label class="checkbox"><input type="checkbox"> Hervé Mbarga</label>
-<label class="checkbox"><input type="checkbox"> Jacky Massing</label>
+<div class="employee-list">
+<label><input type="checkbox" class="emp"> Hervé Mbarga</label>
+<label><input type="checkbox" class="emp"> Jacky Massing</label>
 </div>
 
+<!-- KUNDE -->
 <div class="section-title">Kunde</div>
 <div class="grid">
-<div class="field"><input placeholder=" "><label>Vorname</label></div>
-<div class="field"><input placeholder=" "><label>Nachname</label></div>
-<div class="field"><input placeholder=" "><label>Telefon</label></div>
-<div class="field"><input placeholder=" "><label>Anschrift</label></div>
+<div class="field"><label>Vorname</label><input></div>
+<div class="field"><label>Nachname</label><input></div>
+<div class="field"><label>Telefon</label><input></div>
+<div class="field"><label>Anschrift</label><input></div>
 </div>
 
+<!-- DATUM & ZEIT -->
 <div class="section-title">Datum & Zeit</div>
 <div class="grid">
-<div class="field"><input type="date"><label>Datum</label></div>
-
-<div class="field">
-<select id="sh"></select><label>Beginn – Stunde</label>
-</div>
-<div class="field">
-<select id="sm"></select><label>Beginn – Minute</label>
+<div class="field"><label>Datum</label><input type="date"></div>
 </div>
 
-<div class="field">
-<select id="eh"></select><label>Ende – Stunde</label>
+<div class="time-grid">
+<div class="time-box">
+<strong>Beginn</strong>
+<div class="time-row">
+<div class="field"><label>Stunde</label><select id="sh"></select></div>
+<div class="field"><label>Minute</label><select id="sm"></select></div>
 </div>
-<div class="field">
-<select id="em"></select><label>Ende – Minute</label>
+</div>
+<div class="time-box">
+<strong>Ende</strong>
+<div class="time-row">
+<div class="field"><label>Stunde</label><select id="eh"></select></div>
+<div class="field"><label>Minute</label><select id="em"></select></div>
+</div>
 </div>
 </div>
 
+<!-- SIGNATURES -->
 <div class="section-title">Unterschriften</div>
-<div class="grid">
-<div>
+<div class="signatures">
+<div class="sig-box">
 <strong>Kunde</strong>
-<div class="signature-box">
-<canvas id="sig"></canvas>
-</div>
+<canvas id="sig1"></canvas>
 <div class="sig-actions">
-<button class="btn-ok" id="confirm">Bestätigen</button>
-<button class="btn-del" id="clear">Löschen</button>
+<button class="confirm" onclick="lockSig(sig1)">Bestätigen</button>
+<button class="delete" onclick="clearSig(sig1)">Löschen</button>
+</div>
+</div>
+<div class="sig-box">
+<strong>Mitarbeiter</strong>
+<canvas id="sig2"></canvas>
+<div class="sig-actions">
+<button class="confirm" onclick="lockSig(sig2)">Bestätigen</button>
+<button class="delete" onclick="clearSig(sig2)">Löschen</button>
 </div>
 </div>
 </div>
 
+<button class="print" onclick="window.print()">Als PDF speichern / drucken</button>
+</div>
 </div>
 
 <script>
-/* ===== TIME OPTIONS ===== */
-function fill(id,max){
-const s=document.getElementById(id);
+function fill(sel,max){
 for(let i=0;i<=max;i++){
-const o=document.createElement("option");
+let o=document.createElement("option");
 o.text=o.value=String(i).padStart(2,"0");
-s.add(o);
+sel.add(o);
 }
 }
-fill("sh",23);fill("eh",23);fill("sm",59);fill("em",59);
+fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
-/* ===== SIGNATURE LOCK ===== */
-const c=document.getElementById("sig");
-const ctx=c.getContext("2d");
-let drawing=false,locked=false;
-
-function resize(){
-c.width=c.offsetWidth;
-c.height=c.offsetHeight;
-}
-resize();window.addEventListener("resize",resize);
-
-c.addEventListener("pointerdown",e=>{
-if(locked) return;
-drawing=true;
-ctx.moveTo(e.offsetX,e.offsetY);
-});
-c.addEventListener("pointermove",e=>{
-if(!drawing||locked) return;
-ctx.lineTo(e.offsetX,e.offsetY);
+function enable(canvas){
+const ctx=canvas.getContext("2d");
+let d=false;
+canvas.addEventListener("pointerdown",()=>d=true);
+canvas.addEventListener("pointerup",()=>{d=false;ctx.beginPath()});
+canvas.addEventListener("pointermove",e=>{
+if(!d)return;
+let r=canvas.getBoundingClientRect();
+ctx.lineWidth=2;
+ctx.lineCap="round";
+ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
 ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
 });
-window.addEventListener("pointerup",()=>drawing=false);
+}
+enable(sig1);enable(sig2);
 
-document.getElementById("confirm").onclick=()=>{
-locked=true;
-document.getElementById("clear").disabled=true;
-};
-document.getElementById("clear").onclick=()=>{
-if(locked) return;
+function lockSig(c){c.style.pointerEvents="none"}
+function clearSig(c){
+let ctx=c.getContext("2d");
 ctx.clearRect(0,0,c.width,c.height);
-};
-
-/* ===== ONE PAGE PRINT FIX ===== */
-window.addEventListener("beforeprint",()=>{
-const box=document.querySelector(".container");
-const scale=Math.min(1,297/(box.scrollHeight/3.78));
-box.style.transform=`scale(${scale})`;
-box.style.transformOrigin="top left";
-});
+c.style.pointerEvents="auto";
+}
 </script>
-
 </body>
 </html>
