@@ -6,168 +6,112 @@
 <title>Leistungsbestätigung</title>
 
 <style>
-:root{
---green:#2ecc71;
---red:#e74c3c;
---border:#dcdcdc;
-}
-
 *{box-sizing:border-box}
-
 body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f2f4f6;
 margin:0;
 padding:16px;
-font-family:Arial, Helvetica, sans-serif;
-background:#f2f4f7;
 }
 
 .container{
-max-width:1200px;
+max-width:1100px;
 margin:auto;
 background:#fff;
 padding:20px;
 border-radius:12px;
 position:relative;
-overflow:hidden;
 }
 
-/* ===== WATERMARK ===== */
-.watermark{
-position:absolute;
-inset:0;
-background:url("HJ_Clean.png") center/60% no-repeat;
-opacity:0.08;
-pointer-events:none; /* IMPORTANT */
-z-index:0;
-}
-
-/* ===== CONTENT ===== */
-.content{
-position:relative;
-z-index:1;
-}
-
-h1{
-text-align:center;
-margin:10px 0 20px;
-}
-
-.section{
-margin-bottom:20px;
-}
+h1{text-align:center;margin-bottom:20px}
 
 .section-title{
 font-weight:bold;
-margin-bottom:8px;
-border-left:4px solid var(--green);
-padding-left:8px;
+margin:18px 0 8px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+.section-title::before{
+content:"";
+width:4px;
+height:18px;
+background:#2ecc71;
+display:inline-block;
 }
 
-/* ===== GRID ===== */
 .grid{
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:12px;
 }
 
-@media(max-width:900px){
-.grid{grid-template-columns:repeat(2,1fr)}
-}
-
-@media(max-width:500px){
-.grid{grid-template-columns:1fr}
-}
-
-label{
-font-size:13px;
-margin-bottom:4px;
-display:block;
-}
-
-input, select{
+label{font-size:14px;margin-bottom:4px;display:block}
+input,select{
 width:100%;
 padding:10px;
-border:1px solid var(--border);
 border-radius:8px;
+border:1px solid #ccc;
 font-size:14px;
 }
 
-/* ===== EMPLOYEES ===== */
+/* === Mitarbeiter === */
 .employees{
 display:flex;
-gap:30px;
+gap:40px;
 flex-wrap:wrap;
 }
-
 .emp{
 display:flex;
 align-items:center;
 gap:8px;
 }
+.emp input{margin:0}
 
-/* ===== SIGNATURES ===== */
-.signatures{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-}
-
-@media(max-width:700px){
-.signatures{grid-template-columns:1fr}
-}
-
-.sig-box{
-border:1px dashed #bbb;
+/* === Signature === */
+.signature-box{
+border:2px dashed #ccc;
 border-radius:10px;
-padding:10px;
+height:180px;
+position:relative;
+overflow:hidden;
 }
-
 canvas{
 width:100%;
-height:150px;
-border:1px solid #ccc;
-border-radius:8px;
-background:#fff;
+height:100%;
 touch-action:none;
 }
-
-.sig-actions{
+.signature-actions{
 display:flex;
 gap:10px;
 margin-top:10px;
 }
-
-button{
+.btn{
 flex:1;
-padding:10px;
+padding:12px;
 border:none;
 border-radius:8px;
-color:#fff;
 font-size:14px;
 cursor:pointer;
 }
+.btn-green{background:#2ecc71;color:#fff}
+.btn-red{background:#e74c3c;color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 
-.confirm{background:var(--green)}
-.delete{background:var(--red)}
-button:disabled{opacity:0.5;cursor:not-allowed}
-
-/* ===== PDF ===== */
-.print{
-margin-top:20px;
-width:100%;
-background:#3498db;
+/* === Watermark === */
+.watermark{
+position:absolute;
+inset:0;
+background:url("HJ_Clean.png") center/60% no-repeat;
+opacity:.08;
+pointer-events:none;
 }
 
+/* === PDF one page === */
 @media print{
-body{background:#fff;padding:0}
-.container{
-box-shadow:none;
-border-radius:0;
-max-width:100%;
-page-break-inside:avoid;
-}
-button{display:none}
-@page{size:A4;margin:10mm}
+body{background:#fff}
+.container{box-shadow:none}
+.btn{display:none}
 }
 </style>
 </head>
@@ -176,21 +120,20 @@ button{display:none}
 <div class="container">
 <div class="watermark"></div>
 
-<div class="content">
-
 <h1>Leistungsbestätigung</h1>
 
-<!-- Mitarbeiter -->
-<div class="section">
 <div class="section-title">Mitarbeiter</div>
 <div class="employees">
-<label class="emp"><input type="checkbox" class="empCheck"> Hervé Mbarga</label>
-<label class="emp"><input type="checkbox" class="empCheck"> Jacky Massing</label>
+<div class="emp">
+<input type="checkbox" id="m1">
+<label for="m1">Hervé Mbarga</label>
+</div>
+<div class="emp">
+<input type="checkbox" id="m2">
+<label for="m2">Jacky Massing</label>
 </div>
 </div>
 
-<!-- Kunde -->
-<div class="section">
 <div class="section-title">Kunde</div>
 <div class="grid">
 <div><label>Vorname</label><input></div>
@@ -198,10 +141,7 @@ button{display:none}
 <div><label>Telefon</label><input></div>
 <div><label>Anschrift</label><input></div>
 </div>
-</div>
 
-<!-- Datum & Zeit -->
-<div class="section">
 <div class="section-title">Datum & Zeit</div>
 <div class="grid">
 <div><label>Datum</label><input type="date"></div>
@@ -210,42 +150,24 @@ button{display:none}
 <div><label>Ende – Stunde</label><select id="es"></select></div>
 <div><label>Ende – Minute</label><select id="em"></select></div>
 </div>
-</div>
 
-<!-- Unterschriften -->
-<div class="section">
 <div class="section-title">Unterschriften</div>
-
-<div class="signatures">
-
-<div class="sig-box">
-<strong>Kunde</strong>
-<canvas id="sigK"></canvas>
-<div class="sig-actions">
-<button class="confirm" id="kc">Bestätigen</button>
-<button class="delete" id="kd">Löschen</button>
-</div>
+<label>Kunde</label>
+<div class="signature-box">
+<canvas id="sig"></canvas>
 </div>
 
-<div class="sig-box">
-<strong>Mitarbeiter</strong>
-<canvas id="sigM"></canvas>
-<div class="sig-actions">
-<button class="confirm" id="mc">Bestätigen</button>
-<button class="delete" id="md">Löschen</button>
-</div>
+<div class="signature-actions">
+<button id="confirm" class="btn btn-green">Bestätigen</button>
+<button id="clear" class="btn btn-red">Löschen</button>
 </div>
 
-</div>
-</div>
-
-<button class="print" onclick="window.print()">Als PDF speichern / drucken</button>
-
-</div>
+<br>
+<button class="btn btn-green" onclick="window.print()">Als PDF speichern / drucken</button>
 </div>
 
 <script>
-/* ===== HOURS ===== */
+/* === Time selects === */
 function fill(sel,max){
 for(let i=0;i<=max;i++){
 let o=document.createElement("option");
@@ -253,44 +175,51 @@ o.text=o.value=String(i).padStart(2,"0");
 sel.add(o);
 }
 }
-fill(bs,23); fill(es,23); fill(bm,59); fill(em,59);
+fill(bs,23);fill(es,23);fill(bm,59);fill(em,59);
 
-/* ===== SIGNATURE ===== */
-function signature(canvas, confirmBtn, deleteBtn){
-const ctx=canvas.getContext("2d");
-let draw=false, locked=false;
+/* === Signature logic === */
+const c=document.getElementById("sig");
+const ctx=c.getContext("2d");
+let drawing=false,locked=false;
 
-canvas.addEventListener("pointerdown",e=>{
-if(locked) return;
-draw=true;
-ctx.beginPath();
-ctx.moveTo(e.offsetX,e.offsetY);
-});
+function resize(){
+c.width=c.offsetWidth;
+c.height=c.offsetHeight;
+}
+resize();window.addEventListener("resize",resize);
 
-canvas.addEventListener("pointermove",e=>{
-if(!draw||locked) return;
-ctx.lineTo(e.offsetX,e.offsetY);
-ctx.stroke();
-});
-
-canvas.addEventListener("pointerup",()=>draw=false);
-
-confirmBtn.onclick=()=>{
-locked=true;
-canvas.style.pointerEvents="none";
-confirmBtn.disabled=true;
-deleteBtn.disabled=true; // 🔒 IMPOSSIBLE À SUPPRIMER
-};
-
-deleteBtn.onclick=()=>{
-if(locked) return;
-ctx.clearRect(0,0,canvas.width,canvas.height);
-};
+function pos(e){
+const r=c.getBoundingClientRect();
+return{
+x:(e.touches?e.touches[0].clientX:e.clientX)-r.left,
+y:(e.touches?e.touches[0].clientY:e.clientY)-r.top
+}
 }
 
-signature(sigK,kc,kd);
-signature(sigM,mc,md);
-</script>
+c.addEventListener("pointerdown",e=>{
+if(locked) return;
+drawing=true;
+let p=pos(e);
+ctx.beginPath();
+ctx.moveTo(p.x,p.y);
+});
+c.addEventListener("pointermove",e=>{
+if(!drawing||locked) return;
+let p=pos(e);
+ctx.lineTo(p.x,p.y);
+ctx.stroke();
+});
+window.addEventListener("pointerup",()=>drawing=false);
 
+confirm.onclick=()=>{
+locked=true;
+clear.disabled=true; // 🔒 suppression impossible après validation
+};
+
+clear.onclick=()=>{
+if(locked) return;
+ctx.clearRect(0,0,c.width,c.height);
+};
+</script>
 </body>
 </html>
