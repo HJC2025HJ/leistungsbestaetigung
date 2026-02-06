@@ -153,60 +153,26 @@ background:#2563eb;
 font-size:16px;
 }
 
-/* ===== PRINT PDF – UNE PAGE + SIGNATURES ===== */
-@media print{
-html, body{
-margin:0;
-padding:0;
-background:#fff;
-height:auto;
-overflow:hidden;
+/* ===== IMAGE SIGNATURE POUR PDF ===== */
+.sig-image{
+display:none;
 }
 
+/* ===== PRINT ===== */
+@media print{
+body{
+padding:0;
+background:#fff;
+}
 .container{
 width:210mm;
 min-height:297mm;
 padding:10mm;
 border-radius:0;
-page-break-inside:avoid;
-}
-
-/* ❌ cacher boutons et canvas */
-button,
-.sig-actions,
-canvas{
-display:none !important;
-}
-
-/* ✅ afficher les signatures validées */
-.sig-image{
-display:block;
-width:100%;
-max-height:160px;
-object-fit:contain;
-}
-
-.watermark{
-opacity:0.08;
-}
-}
-
-.content,
-.signatures,
-.sig-box{
-page-break-inside:avoid;
-}
-
-button,
-.sig-actions{
-display:none !important;
-}
-
-.watermark{
-opacity:0.08;
-}
 }
 button,.sig-actions{display:none!important}
+canvas{display:none!important}
+.sig-image{display:block!important;width:100%;max-height:160px}
 .watermark{opacity:0.08}
 }
 </style>
@@ -228,14 +194,12 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 
 <h1>Leistungsbestätigung</h1>
 
-<!-- MITARBEITER -->
 <div class="section-title">Mitarbeiter</div>
 <div class="employee-list">
 <label><input type="checkbox"> Hervé Mbarga</label>
 <label><input type="checkbox"> Jacky Massing</label>
 </div>
 
-<!-- KUNDE -->
 <div class="section-title">Kunde</div>
 <div class="grid">
 <div class="field"><label>Vorname</label><input></div>
@@ -244,7 +208,6 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <div class="field"><label>Anschrift</label><input></div>
 </div>
 
-<!-- DATUM & ZEIT -->
 <div class="section-title">Datum & Zeit</div>
 <div class="grid">
 <div class="field"><label>Datum</label><input type="date"></div>
@@ -267,7 +230,6 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 </div>
 </div>
 
-<!-- SIGNATURES -->
 <div class="section-title">Unterschriften</div>
 <div class="signatures">
 <div class="sig-box">
@@ -278,6 +240,7 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <button id="clearK" class="delete">Löschen</button>
 </div>
 </div>
+
 <div class="sig-box">
 <strong>Mitarbeiter</strong>
 <canvas id="sigM"></canvas>
@@ -302,7 +265,7 @@ sel.add(o);
 }
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
-/* ===== SIGNATURES – VERROUILLAGE TOTAL ===== */
+/* ===== SIGNATURES ===== */
 function signatureController(canvas, confirmBtn, clearBtn){
 const ctx=canvas.getContext("2d");
 let drawing=false;
@@ -332,41 +295,31 @@ ctx.beginPath();
 
 confirmBtn.onclick=()=>{
 locked=true;
+canvas.dataset.locked="true";
 canvas.style.pointerEvents="none";
-canvas.style.opacity="0.85";
-clearBtn.disabled=true; // 🔒 VERROU UI
+clearBtn.disabled=true;
 };
 
 clearBtn.onclick=()=>{
-if(locked) return; // 🔒 VERROU LOGIQUE
+if(locked) return;
 ctx.clearRect(0,0,canvas.width,canvas.height);
 };
 }
 
-/* INIT */
-signatureController(
-document.getElementById("sigK"),
-document.getElementById("confirmK"),
-document.getElementById("clearK")
-);
-signatureController(
-document.getElementById("sigM"),
-document.getElementById("confirmM"),
-document.getElementById("clearM")
-);
-  function prepareSignaturesForPrint(){
-document.querySelectorAll("canvas").forEach(canvas=>{
-if(canvas.dataset.locked !== "true") return;
+signatureController(sigK,confirmK,clearK);
+signatureController(sigM,confirmM,clearM);
 
-const img = document.createElement("img");
-img.src = canvas.toDataURL("image/png");
-img.className = "sig-image";
-
-canvas.parentNode.insertBefore(img, canvas.nextSibling);
-});
+/* ===== AVANT IMPRESSION : CONVERTIR SIGNATURES ===== */
+window.addEventListener("beforeprint",()=>{
+document.querySelectorAll("canvas").forEach(c=>{
+if(c.dataset.locked==="true"){
+const img=document.createElement("img");
+img.src=c.toDataURL("image/png");
+img.className="sig-image";
+c.after(img);
 }
-
-window.addEventListener("beforeprint", prepareSignaturesForPrint);
+});
+});
 </script>
 
 </body>
