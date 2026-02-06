@@ -142,6 +142,10 @@ color:#fff;
 }
 .confirm{background:#22c55e}
 .delete{background:#ef4444}
+.delete:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
 .print{
 margin-top:30px;
 width:100%;
@@ -229,16 +233,16 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <strong>Kunde</strong>
 <canvas id="sigK"></canvas>
 <div class="sig-actions">
-<button class="confirm" onclick="sigK_lock()">Bestätigen</button>
-<button class="delete" onclick="sigK_clear()">Löschen</button>
+<button id="confirmK" class="confirm">Bestätigen</button>
+<button id="clearK" class="delete">Löschen</button>
 </div>
 </div>
 <div class="sig-box">
 <strong>Mitarbeiter</strong>
 <canvas id="sigM"></canvas>
 <div class="sig-actions">
-<button class="confirm" onclick="sigM_lock()">Bestätigen</button>
-<button class="delete" onclick="sigM_clear()">Löschen</button>
+<button id="confirmM" class="confirm">Bestätigen</button>
+<button id="clearM" class="delete">Löschen</button>
 </div>
 </div>
 </div>
@@ -257,8 +261,8 @@ sel.add(o);
 }
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
-/* ===== SIGNATURES – VERROUILLAGE DÉFINITIF ===== */
-function signatureController(canvas){
+/* ===== SIGNATURES – VERROUILLAGE TOTAL ===== */
+function signatureController(canvas, confirmBtn, clearBtn){
 const ctx=canvas.getContext("2d");
 let drawing=false;
 let locked=false;
@@ -285,26 +289,30 @@ drawing=false;
 ctx.beginPath();
 });
 
-return{
-lock(){
+confirmBtn.onclick=()=>{
 locked=true;
 canvas.style.pointerEvents="none";
 canvas.style.opacity="0.85";
-},
-clear(){
-if(locked) return; // 🔒 impossible après validation
+clearBtn.disabled=true; // 🔒 VERROU UI
+};
+
+clearBtn.onclick=()=>{
+if(locked) return; // 🔒 VERROU LOGIQUE
 ctx.clearRect(0,0,canvas.width,canvas.height);
-}
 };
 }
 
-const sigK_ctrl=signatureController(document.getElementById("sigK"));
-const sigM_ctrl=signatureController(document.getElementById("sigM"));
-
-function sigK_lock(){sigK_ctrl.lock()}
-function sigK_clear(){sigK_ctrl.clear()}
-function sigM_lock(){sigM_ctrl.lock()}
-function sigM_clear(){sigM_ctrl.clear()}
+/* INIT */
+signatureController(
+document.getElementById("sigK"),
+document.getElementById("confirmK"),
+document.getElementById("clearK")
+);
+signatureController(
+document.getElementById("sigM"),
+document.getElementById("confirmM"),
+document.getElementById("clearM")
+);
 </script>
 
 </body>
