@@ -6,136 +6,142 @@
 <title>Leistungsbestätigung</title>
 
 <style>
-:root{
-  --green:#2ecc71;
-  --gray:#f2f2f2;
-  --border:#dcdcdc;
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f2f4f7;
 }
-
-*{box-sizing:border-box;}
-
-html,body{
-  margin:0;
-  padding:0;
-  background:#eef3f0;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
 .container{
-  width:210mm;
-  height:297mm;
-  margin:auto;
-  background:white;
-  padding:10mm;
-  position:relative;
-  overflow:hidden;
+max-width:900px;
+margin:auto;
+background:#fff;
+padding:16px;
+position:relative;
+overflow:hidden;
 }
 
 /* ===== WATERMARK ===== */
 .watermark{
-  position:absolute;
-  inset:0;
-  background:url("HJ_Clean.png") center/80% no-repeat;
-  opacity:0.08;
-  pointer-events:none;   /* 🔒 N’INTERFÈRE PLUS */
+position:absolute;
+inset:0;
+background:url("HJ_Clean.png") center/60% no-repeat;
+opacity:0.08;
+pointer-events:none;
+z-index:0;
 }
 
-/* ===== TITLES ===== */
-h1{text-align:center;margin:10px 0;}
+/* ===== HEADER ===== */
+header{
+display:flex;
+flex-direction:column;
+gap:10px;
+z-index:1;
+position:relative;
+}
+.header-top{
+display:flex;
+gap:12px;
+align-items:center;
+flex-wrap:wrap;
+}
+.header-top img{height:55px}
+.header-info{font-size:13px;line-height:1.4}
+h1{text-align:center;margin:12px 0}
+
+/* ===== SECTIONS ===== */
+section{
+margin-top:18px;
+z-index:1;
+position:relative;
+}
 .section-title{
-  margin-top:12px;
-  font-weight:bold;
-  border-left:4px solid var(--green);
-  padding-left:8px;
+font-weight:bold;
+margin-bottom:8px;
+border-left:4px solid #2ecc71;
+padding-left:8px;
 }
 
-/* ===== GRID ===== */
+/* ===== FORM GRID ===== */
 .grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:10px;
+display:grid;
+grid-template-columns:1fr;
+gap:10px;
+}
+@media(min-width:700px){
+.grid{grid-template-columns:repeat(4,1fr)}
+.span-2{grid-column:span 2}
+.span-4{grid-column:span 4}
 }
 
-/* ===== FLOATING LABELS ===== */
-.field{
-  position:relative;
+label{
+font-size:13px;
+font-weight:bold;
 }
-.field input,
-.field select{
-  width:100%;
-  padding:14px 10px 6px;
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:#fafafa;
-}
-.field label{
-  position:absolute;
-  left:10px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:13px;
-  color:#777;
-  background:white;
-  padding:0 4px;
-  pointer-events:none;
-  transition:.2s;
-}
-.field input:focus+label,
-.field input:not(:placeholder-shown)+label,
-.field select:focus+label{
-  top:2px;
-  font-size:11px;
-  color:var(--green);
+input,select{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
 }
 
-/* ===== MITARBEITER ===== */
-.checkbox{
-  display:flex;
-  align-items:center;
-  gap:8px;
+/* ===== EMPLOYEES ===== */
+.employees{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+.employees label{
+display:flex;
+align-items:center;
+gap:8px;
+font-weight:normal;
 }
 
 /* ===== SIGNATURE ===== */
 .signature-box{
-  border:2px dashed #bbb;
-  border-radius:8px;
-  height:120px;
-  position:relative;
+border:2px dashed #bbb;
+border-radius:10px;
+padding:10px;
 }
-.signature-box canvas{
-  width:100%;
-  height:100%;
-  touch-action:none;
+canvas{
+width:100%;
+height:160px;
+background:#fff;
+border-radius:6px;
+touch-action:none;
 }
 .sig-actions{
-  display:flex;
-  gap:10px;
-  margin-top:6px;
+display:flex;
+gap:10px;
+margin-top:8px;
 }
 .sig-actions button{
-  flex:1;
-  padding:6px;
-  border:none;
-  color:white;
-  border-radius:6px;
+flex:1;
+padding:12px;
+border:none;
+border-radius:8px;
+color:#fff;
+font-size:14px;
 }
-.btn-ok{background:#2ecc71;}
-.btn-del{background:#e74c3c;}
-.btn-del[disabled]{opacity:.4}
+.confirm{background:#2ecc71}
+.delete{background:#e74c3c}
+button:disabled{
+background:#999;
+cursor:not-allowed;
+}
 
 /* ===== PRINT ===== */
 @media print{
-  html,body{
-    width:210mm;
-    height:297mm;
-    overflow:hidden;
-  }
-  .container{
-    width:210mm;
-    height:297mm;
-    overflow:hidden;
-  }
-  button{display:none!important;}
+body{background:#fff}
+.container{
+box-shadow:none;
+padding:10mm;
+max-width:210mm;
+min-height:297mm;
+}
+button{display:none}
 }
 </style>
 </head>
@@ -144,109 +150,121 @@ h1{text-align:center;margin:10px 0;}
 <div class="container">
 <div class="watermark"></div>
 
-<h1>Leistungsbestätigung</h1>
-
-<div class="section-title">Mitarbeiter</div>
-<div class="grid">
-  <label class="checkbox"><input type="checkbox"> Hervé Mbarga</label>
-  <label class="checkbox"><input type="checkbox"> Jacky Massing</label>
+<header>
+<div class="header-top">
+<img src="HJ_Clean.png">
+<div class="header-info">
+<strong>Cleaning – Marke von HJ Corporate GbR</strong><br>
+Stauseestraße 27b · 54317 Riveris<br>
+Tel. +49 176 87898900 · info@hjcorporate.de
 </div>
+</div>
+<h1>Leistungsbestätigung</h1>
+</header>
 
+<section>
+<div class="section-title">Mitarbeiter</div>
+<div class="employees">
+<label><input type="checkbox" class="emp"> Hervé Mbarga</label>
+<label><input type="checkbox" class="emp"> Jacky Massing</label>
+</div>
+</section>
+
+<section>
 <div class="section-title">Kunde</div>
 <div class="grid">
-  <div class="field"><input placeholder=" "><label>Vorname</label></div>
-  <div class="field"><input placeholder=" "><label>Nachname</label></div>
-  <div class="field"><input placeholder=" "><label>Telefon</label></div>
-  <div class="field"><input placeholder=" "><label>Anschrift</label></div>
+<div class="span-2"><label>Vorname</label><input></div>
+<div class="span-2"><label>Nachname</label><input></div>
+<div class="span-2"><label>Telefon</label><input></div>
+<div class="span-2"><label>Anschrift</label><input></div>
 </div>
+</section>
 
+<section>
 <div class="section-title">Datum & Zeit</div>
 <div class="grid">
-  <div class="field"><input type="date"><label>Datum</label></div>
+<div class="span-2"><label>Datum</label><input type="date"></div>
 
-  <div class="field">
-    <select id="sh"></select><label>Beginn – Stunde</label>
-  </div>
-  <div class="field">
-    <select id="sm"></select><label>Beginn – Minute</label>
-  </div>
-
-  <div class="field">
-    <select id="eh"></select><label>Ende – Stunde</label>
-  </div>
-  <div class="field">
-    <select id="em"></select><label>Ende – Minute</label>
-  </div>
+<div>
+<label>Beginn – Stunde</label>
+<select id="bh"></select>
+</div>
+<div>
+<label>Beginn – Minute</label>
+<select id="bm"></select>
 </div>
 
+<div>
+<label>Ende – Stunde</label>
+<select id="eh"></select>
+</div>
+<div>
+<label>Ende – Minute</label>
+<select id="em"></select>
+</div>
+</div>
+</section>
+
+<section>
 <div class="section-title">Unterschriften</div>
-<div class="grid">
-  <div>
-    <strong>Kunde</strong>
-    <div class="signature-box">
-      <canvas id="sig"></canvas>
-    </div>
-    <div class="sig-actions">
-      <button class="btn-ok" id="confirm">Bestätigen</button>
-      <button class="btn-del" id="clear">Löschen</button>
-    </div>
-  </div>
+
+<label>Kunde</label>
+<div class="signature-box">
+<canvas id="sig"></canvas>
+<div class="sig-actions">
+<button class="confirm" id="confirm">Bestätigen</button>
+<button class="delete" id="clear">Löschen</button>
 </div>
+</div>
+</section>
+
+<button onclick="window.print()" style="width:100%;margin-top:20px;padding:14px;font-size:16px">
+Als PDF speichern / drucken
+</button>
 
 </div>
 
 <script>
-/* ===== TIME OPTIONS ===== */
-function fill(id,max){
-  const s=document.getElementById(id);
-  for(let i=0;i<=max;i++){
-    const o=document.createElement("option");
-    o.text=o.value=String(i).padStart(2,"0");
-    s.add(o);
-  }
+/* === HOURS / MINUTES === */
+function fill(sel,max){
+for(let i=0;i<=max;i++){
+let o=document.createElement("option");
+o.text=o.value=String(i).padStart(2,"0");
+sel.add(o);
 }
-fill("sh",23);fill("eh",23);fill("sm",59);fill("em",59);
-
-/* ===== SIGNATURE LOCK ===== */
-const c=document.getElementById("sig");
-const ctx=c.getContext("2d");
-let drawing=false,locked=false;
-
-function resize(){
-  c.width=c.offsetWidth;
-  c.height=c.offsetHeight;
 }
-resize();window.addEventListener("resize",resize);
+fill(bh,23);fill(eh,23);
+fill(bm,59);fill(em,59);
 
-c.addEventListener("pointerdown",e=>{
-  if(locked) return;
-  drawing=true;
-  ctx.moveTo(e.offsetX,e.offsetY);
-});
-c.addEventListener("pointermove",e=>{
-  if(!drawing||locked) return;
-  ctx.lineTo(e.offsetX,e.offsetY);
-  ctx.stroke();
-});
-window.addEventListener("pointerup",()=>drawing=false);
+/* === SIGNATURE === */
+const canvas=document.getElementById("sig");
+const ctx=canvas.getContext("2d");
+let drawing=false, locked=false;
 
-document.getElementById("confirm").onclick=()=>{
-  locked=true;
-  document.getElementById("clear").disabled=true;
+canvas.addEventListener("pointerdown",e=>{
+if(locked)return;
+drawing=true;
+ctx.beginPath();
+});
+canvas.addEventListener("pointermove",e=>{
+if(!drawing||locked)return;
+const r=canvas.getBoundingClientRect();
+ctx.lineWidth=2;
+ctx.lineCap="round";
+ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+ctx.stroke();
+});
+canvas.addEventListener("pointerup",()=>drawing=false);
+
+confirm.onclick=()=>{
+locked=true;
+confirm.disabled=true;
+clear.disabled=true;
 };
-document.getElementById("clear").onclick=()=>{
-  if(locked) return;
-  ctx.clearRect(0,0,c.width,c.height);
+clear.onclick=()=>{
+if(locked)return;
+ctx.clearRect(0,0,canvas.width,canvas.height);
 };
-
-/* ===== ONE PAGE PRINT FIX ===== */
-window.addEventListener("beforeprint",()=>{
-  const box=document.querySelector(".container");
-  const scale=Math.min(1,297/(box.scrollHeight/3.78));
-  box.style.transform=`scale(${scale})`;
-  box.style.transformOrigin="top left";
-});
 </script>
-
 </body>
 </html>
