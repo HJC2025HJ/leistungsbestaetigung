@@ -142,6 +142,10 @@ color:#fff;
 }
 .confirm{background:#22c55e}
 .delete{background:#ef4444}
+.delete:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
 .print{
 margin-top:30px;
 width:100%;
@@ -186,8 +190,8 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <!-- MITARBEITER -->
 <div class="section-title">Mitarbeiter</div>
 <div class="employee-list">
-<label><input type="checkbox" class="emp"> Hervé Mbarga</label>
-<label><input type="checkbox" class="emp"> Jacky Massing</label>
+<label><input type="checkbox"> Hervé Mbarga</label>
+<label><input type="checkbox"> Jacky Massing</label>
 </div>
 
 <!-- KUNDE -->
@@ -227,18 +231,18 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <div class="signatures">
 <div class="sig-box">
 <strong>Kunde</strong>
-<canvas id="sig1"></canvas>
+<canvas id="sigK"></canvas>
 <div class="sig-actions">
-<button class="confirm" onclick="lockSig(sig1)">Bestätigen</button>
-<button class="delete" onclick="clearSig(sig1)">Löschen</button>
+<button id="confirmK" class="confirm">Bestätigen</button>
+<button id="clearK" class="delete">Löschen</button>
 </div>
 </div>
 <div class="sig-box">
 <strong>Mitarbeiter</strong>
-<canvas id="sig2"></canvas>
+<canvas id="sigM"></canvas>
 <div class="sig-actions">
-<button class="confirm" onclick="lockSig(sig2)">Bestätigen</button>
-<button class="delete" onclick="clearSig(sig2)">Löschen</button>
+<button id="confirmM" class="confirm">Bestätigen</button>
+<button id="clearM" class="delete">Löschen</button>
 </div>
 </div>
 </div>
@@ -257,30 +261,59 @@ sel.add(o);
 }
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
-function enable(canvas){
+/* ===== SIGNATURES – VERROUILLAGE TOTAL ===== */
+function signatureController(canvas, confirmBtn, clearBtn){
 const ctx=canvas.getContext("2d");
-let d=false;
-canvas.addEventListener("pointerdown",()=>d=true);
-canvas.addEventListener("pointerup",()=>{d=false;ctx.beginPath()});
+let drawing=false;
+let locked=false;
+
+canvas.addEventListener("pointerdown",e=>{
+if(locked) return;
+drawing=true;
+ctx.beginPath();
+const r=canvas.getBoundingClientRect();
+ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+});
+
 canvas.addEventListener("pointermove",e=>{
-if(!d)return;
-let r=canvas.getBoundingClientRect();
+if(!drawing || locked) return;
+const r=canvas.getBoundingClientRect();
 ctx.lineWidth=2;
 ctx.lineCap="round";
 ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
 ctx.stroke();
-ctx.beginPath();
-ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
 });
-}
-enable(sig1);enable(sig2);
 
-function lockSig(c){c.style.pointerEvents="none"}
-function clearSig(c){
-let ctx=c.getContext("2d");
-ctx.clearRect(0,0,c.width,c.height);
-c.style.pointerEvents="auto";
+canvas.addEventListener("pointerup",()=>{
+drawing=false;
+ctx.beginPath();
+});
+
+confirmBtn.onclick=()=>{
+locked=true;
+canvas.style.pointerEvents="none";
+canvas.style.opacity="0.85";
+clearBtn.disabled=true; // 🔒 VERROU UI
+};
+
+clearBtn.onclick=()=>{
+if(locked) return; // 🔒 VERROU LOGIQUE
+ctx.clearRect(0,0,canvas.width,canvas.height);
+};
 }
+
+/* INIT */
+signatureController(
+document.getElementById("sigK"),
+document.getElementById("confirmK"),
+document.getElementById("clearK")
+);
+signatureController(
+document.getElementById("sigM"),
+document.getElementById("confirmM"),
+document.getElementById("clearM")
+);
 </script>
+
 </body>
 </html>
