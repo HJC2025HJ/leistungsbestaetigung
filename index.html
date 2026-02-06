@@ -153,30 +153,42 @@ background:#2563eb;
 font-size:16px;
 }
 
-/* ===== PRINT ===== */
-@media print{
-body{
-padding:0;
-background:#fff;
-}
+/* ===== PRINT PDF – UNE PAGE + SIGNATURES ===== */
 @media print{
 html, body{
-height:100%;
+margin:0;
+padding:0;
+background:#fff;
+height:auto;
 overflow:hidden;
 }
 
-body{
-padding:0;
-background:#fff;
-}
-
 .container{
-width:100%;
-height:auto;
-max-height:100%;
+width:210mm;
+min-height:297mm;
 padding:10mm;
 border-radius:0;
 page-break-inside:avoid;
+}
+
+/* ❌ cacher boutons et canvas */
+button,
+.sig-actions,
+canvas{
+display:none !important;
+}
+
+/* ✅ afficher les signatures validées */
+.sig-image{
+display:block;
+width:100%;
+max-height:160px;
+object-fit:contain;
+}
+
+.watermark{
+opacity:0.08;
+}
 }
 
 .content,
@@ -342,6 +354,19 @@ document.getElementById("sigM"),
 document.getElementById("confirmM"),
 document.getElementById("clearM")
 );
+  function prepareSignaturesForPrint(){
+document.querySelectorAll("canvas").forEach(canvas=>{
+if(canvas.dataset.locked !== "true") return;
+
+const img = document.createElement("img");
+img.src = canvas.toDataURL("image/png");
+img.className = "sig-image";
+
+canvas.parentNode.insertBefore(img, canvas.nextSibling);
+});
+}
+
+window.addEventListener("beforeprint", prepareSignaturesForPrint);
 </script>
 
 </body>
