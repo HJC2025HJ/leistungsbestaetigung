@@ -9,7 +9,7 @@
 *{box-sizing:border-box}
 body{
 margin:0;
-padding:16px;
+padding:14px;
 font-family:Arial,Helvetica,sans-serif;
 background:#eef2f3;
 }
@@ -19,7 +19,7 @@ max-width:1100px;
 margin:auto;
 background:#fff;
 border-radius:14px;
-padding:22px;
+padding:20px;
 position:relative;
 overflow:hidden;
 }
@@ -34,10 +34,10 @@ pointer-events:none;
 
 .content{position:relative;z-index:1}
 
-h1{text-align:center;margin:20px 0}
+h1{text-align:center;margin:16px 0}
 
 .section-title{
-margin-top:22px;
+margin-top:20px;
 font-weight:bold;
 border-left:5px solid #22c55e;
 padding-left:10px;
@@ -46,8 +46,8 @@ padding-left:10px;
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:14px;
-margin-top:12px;
+gap:12px;
+margin-top:10px;
 }
 
 .field label{
@@ -75,25 +75,19 @@ margin:6px 0;
 .time-grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:16px;
-}
-
-.time-box{
-border:1px solid #ddd;
-border-radius:10px;
-padding:10px;
+gap:14px;
 }
 
 .signatures{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:16px;
-margin-top:18px;
+gap:14px;
+margin-top:16px;
 }
 
 canvas{
 width:100%;
-height:150px;
+height:140px;
 border:2px dashed #999;
 border-radius:8px;
 background:#fff;
@@ -117,49 +111,38 @@ color:#fff;
 .confirm{background:#22c55e}
 .delete{background:#ef4444}
 .print{
-margin-top:22px;
+margin-top:20px;
 width:100%;
 background:#2563eb;
 font-size:16px;
 }
 
-/* ===== TEXTE POUR PDF ===== */
-.print-value{
-display:none;
-font-size:14px;
-margin-top:4px;
-}
-
-/* ===== PRINT PRO ===== */
+/* ===== PRINT : 1 PAGE PRO ===== */
 @media print{
-@page{size:A4;margin:10mm;}
+@page{size:A4 portrait;margin:10mm;}
 
-body{background:#fff;padding:0;}
-.container{
-width:100%;
-padding:0;
-border-radius:0;
+html,body{
+background:#fff;
+-webkit-print-color-adjust:exact;
+print-color-adjust:exact;
 }
 
 input,select,button,.sig-actions{
 display:none!important;
 }
 
-.print-value{
-display:block!important;
-}
-
 canvas{
-height:85px!important;
-border:none;
+height:90px!important;
+border:none!important;
 }
 
-.signatures{
-gap:10px;
+.container{
+border-radius:0;
+padding:0;
 }
 
-.section-title{
-margin-top:14px;
+.watermark{
+opacity:0.12;
 }
 }
 </style>
@@ -168,7 +151,6 @@ margin-top:14px;
 <body>
 <div class="container">
 <div class="watermark"></div>
-
 <div class="content">
 
 <h1>Leistungsbestätigung</h1>
@@ -177,47 +159,30 @@ margin-top:14px;
 <div class="employee-list">
 <label><input type="checkbox" class="emp"> Hervé Mbarga</label>
 <label><input type="checkbox" class="emp"> Jacky Massing</label>
-<div class="print-value" id="p-emp"></div>
-</div>
-
-<div class="section-title">Kunde</div>
-<div class="grid">
-<div class="field"><label>Vorname</label><input id="vn"><div class="print-value" id="p-vn"></div></div>
-<div class="field"><label>Nachname</label><input id="nn"><div class="print-value" id="p-nn"></div></div>
-<div class="field"><label>Telefon</label><input id="tel"><div class="print-value" id="p-tel"></div></div>
-<div class="field"><label>Anschrift</label><input id="adr"><div class="print-value" id="p-adr"></div></div>
 </div>
 
 <div class="section-title">Datum & Zeit</div>
-<div class="grid">
-<div class="field"><label>Datum</label><input type="date" id="date"><div class="print-value" id="p-date"></div></div>
-</div>
-
 <div class="time-grid">
-<div class="time-box">
-<strong>Beginn</strong>
-<div class="grid">
-<div class="field"><label>Stunde</label><select id="sh"></select></div>
-<div class="field"><label>Minute</label><select id="sm"></select></div>
+<div class="field">
+<label>Beginn</label>
+<select id="sh"></select>
+<select id="sm"></select>
 </div>
-</div>
-<div class="time-box">
-<strong>Ende</strong>
-<div class="grid">
-<div class="field"><label>Stunde</label><select id="eh"></select></div>
-<div class="field"><label>Minute</label><select id="em"></select></div>
-</div>
+<div class="field">
+<label>Ende</label>
+<select id="eh"></select>
+<select id="em"></select>
 </div>
 </div>
 
 <div class="section-title">Berechnung</div>
 <div class="grid">
-<div class="field"><label>Anzahl Mitarbeiter</label><input id="empCount" readonly><div class="print-value" id="p-empCount"></div></div>
-<div class="field"><label>Arbeitsstunden</label><input id="hours" readonly><div class="print-value" id="p-hours"></div></div>
-<div class="field"><label>€/Stunde</label><input id="rate" value="25"><div class="print-value" id="p-rate"></div></div>
-<div class="field"><label>Kilometer</label><input id="km" value="0"><div class="print-value" id="p-km"></div></div>
-<div class="field"><label>€/km</label><input id="kmrate" value="0.30"><div class="print-value" id="p-kmrate"></div></div>
-<div class="field"><label>Gesamtbetrag €</label><input id="total" readonly><div class="print-value" id="p-total"></div></div>
+<div class="field"><label>Anzahl Mitarbeiter</label><input id="empCount" readonly></div>
+<div class="field"><label>Arbeitsstunden</label><input id="hours" readonly></div>
+<div class="field"><label>€/Stunde</label><input id="rate" value="25"></div>
+<div class="field"><label>Kilometer</label><input id="km" value="0"></div>
+<div class="field"><label>€/km</label><input id="kmrate" value="0.30"></div>
+<div class="field"><label>Gesamtbetrag €</label><input id="total" readonly></div>
 </div>
 
 <div class="section-title">Unterschriften</div>
@@ -225,10 +190,19 @@ margin-top:14px;
 <div>
 <strong>Kunde</strong>
 <canvas id="sigK"></canvas>
+<div class="sig-actions">
+<button class="confirm" onclick="lockSig('sigK',this)">Bestätigen</button>
+<button class="delete" onclick="clearSig('sigK',this)">Löschen</button>
 </div>
+</div>
+
 <div>
 <strong>Mitarbeiter</strong>
 <canvas id="sigM"></canvas>
+<div class="sig-actions">
+<button class="confirm" onclick="lockSig('sigM',this)">Bestätigen</button>
+<button class="delete" onclick="clearSig('sigM',this)">Löschen</button>
+</div>
 </div>
 </div>
 
@@ -238,41 +212,83 @@ margin-top:14px;
 </div>
 
 <script>
-function fill(s,m){for(let i=0;i<=m;i++){let o=document.createElement("option");o.value=o.text=String(i).padStart(2,"0");s.add(o)}}
+/* ===== HEURES ===== */
+function fill(s,m){for(let i=0;i<=m;i++){let o=document.createElement("option");o.text=o.value=String(i).padStart(2,"0");s.add(o)}}
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
+/* ===== CALCUL ===== */
 function calc(){
 const emp=document.querySelectorAll(".emp:checked").length;
 empCount.value=emp;
-const start=Number(sh.value)+Number(sm.value)/60;
-const end=Number(eh.value)+Number(em.value)/60;
+
+const start=+sh.value + +sm.value/60;
+const end=+eh.value + +em.value/60;
 const base=Math.max(end-start,0);
-hours.value=(base*emp).toFixed(2);
-total.value=((hours.value*rate.value)+(km.value*kmrate.value)).toFixed(2);
+
+const hrs=base*emp;
+hours.value=hrs.toFixed(2);
+total.value=((hrs*rate.value)+(km.value*kmrate.value)).toFixed(2);
 }
 document.querySelectorAll("input,select").forEach(e=>e.addEventListener("input",calc));
 
-function sig(c){
-const ctx=c.getContext("2d");let d=false;
-c.onpointerdown=e=>{d=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);}
-c.onpointermove=e=>{if(d){ctx.lineWidth=2;ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}}
-c.onpointerup=()=>d=false;
-}
-sig(sigK);sig(sigM);
+/* ===== SIGNATURES (DESSIN OK) ===== */
+function enableSignature(canvas){
+const ctx=canvas.getContext("2d");
+let draw=false,locked=false;
 
+canvas.addEventListener("pointerdown",e=>{
+if(locked)return;
+draw=true;
+const r=canvas.getBoundingClientRect();
+ctx.beginPath();
+ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+});
+
+canvas.addEventListener("pointermove",e=>{
+if(!draw||locked)return;
+const r=canvas.getBoundingClientRect();
+ctx.lineWidth=2;
+ctx.lineCap="round";
+ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+ctx.stroke();
+});
+
+canvas.addEventListener("pointerup",()=>draw=false);
+
+canvas.lock=()=>{locked=true;canvas.style.pointerEvents="none"}
+canvas.clear=()=>{if(!locked)ctx.clearRect(0,0,canvas.width,canvas.height)}
+}
+
+enableSignature(sigK);
+enableSignature(sigM);
+
+function lockSig(id,btn){
+const c=document.getElementById(id);
+c.lock();
+btn.nextElementSibling.disabled=true;
+}
+
+function clearSig(id){
+document.getElementById(id).clear();
+}
+
+/* ===== PDF : CONVERSION CANVAS → IMAGE ===== */
+let backups=[];
 window.addEventListener("beforeprint",()=>{
-p-vn.textContent=vn.value;
-p-nn.textContent=nn.value;
-p-tel.textContent=tel.value;
-p-adr.textContent=adr.value;
-p-date.textContent=date.value;
-p-emp.textContent=[...document.querySelectorAll(".emp:checked")].map(e=>e.parentNode.textContent).join(", ");
-p-empCount.textContent=empCount.value;
-p-hours.textContent=hours.value;
-p-rate.textContent=rate.value+" €";
-p-km.textContent=km.value;
-p-kmrate.textContent=kmrate.value+" €";
-p-total.textContent=total.value+" €";
+document.querySelectorAll("canvas").forEach(c=>{
+const img=new Image();
+img.src=c.toDataURL();
+img.style.width=c.offsetWidth+"px";
+img.style.height=c.offsetHeight+"px";
+backups.push({c,img});
+c.replaceWith(img);
+});
+});
+window.addEventListener("afterprint",()=>{
+backups.forEach(o=>{
+o.img.replaceWith(o.c);
+});
+backups=[];
 });
 </script>
 
