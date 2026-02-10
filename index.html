@@ -153,26 +153,48 @@ background:#2563eb;
 font-size:16px;
 }
 
-/* ===== IMAGE SIGNATURE POUR PDF ===== */
-.sig-image{
-display:none;
+/* =====================================================
+✅ SEULE MODIFICATION — PRINT SUR 1 SEULE PAGE
+===================================================== */
+@media print{
+@page{
+size:A4;
+margin:8mm;
 }
 
-/* ===== PRINT ===== */
-@media print{
-body{
-padding:0;
+html,body{
+height:100%;
+overflow:hidden;
 background:#fff;
+padding:0;
 }
+
 .container{
-width:210mm;
-min-height:297mm;
-padding:10mm;
+width:100%;
+max-width:100%;
+padding:6mm;
 border-radius:0;
 }
-button,.sig-actions{display:none!important}
-canvas{display:none!important}
-.sig-image{display:block!important;width:100%;max-height:160px}
+
+/* signatures visibles mais compactes */
+canvas{
+height:110px !important;
+max-height:110px !important;
+}
+
+/* boutons jamais imprimés */
+button,
+.sig-actions{
+display:none !important;
+}
+
+/* aucune coupure */
+.section-title,
+.signatures,
+.sig-box{
+page-break-inside:avoid;
+}
+
 .watermark{opacity:0.08}
 }
 </style>
@@ -240,7 +262,6 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <button id="clearK" class="delete">Löschen</button>
 </div>
 </div>
-
 <div class="sig-box">
 <strong>Mitarbeiter</strong>
 <canvas id="sigM"></canvas>
@@ -265,7 +286,6 @@ sel.add(o);
 }
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
-/* ===== SIGNATURES ===== */
 function signatureController(canvas, confirmBtn, clearBtn){
 const ctx=canvas.getContext("2d");
 let drawing=false;
@@ -295,8 +315,8 @@ ctx.beginPath();
 
 confirmBtn.onclick=()=>{
 locked=true;
-canvas.dataset.locked="true";
 canvas.style.pointerEvents="none";
+canvas.style.opacity="0.85";
 clearBtn.disabled=true;
 };
 
@@ -308,18 +328,6 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 
 signatureController(sigK,confirmK,clearK);
 signatureController(sigM,confirmM,clearM);
-
-/* ===== AVANT IMPRESSION : CONVERTIR SIGNATURES ===== */
-window.addEventListener("beforeprint",()=>{
-document.querySelectorAll("canvas").forEach(c=>{
-if(c.dataset.locked==="true"){
-const img=document.createElement("img");
-img.src=c.toDataURL("image/png");
-img.className="sig-image";
-c.after(img);
-}
-});
-});
 </script>
 
 </body>
