@@ -9,50 +9,77 @@
 *{box-sizing:border-box}
 body{
 margin:0;
-padding:16px;
+padding:12px;
 font-family:Arial,Helvetica,sans-serif;
 background:#eef2f3;
 }
+
 .container{
 max-width:1200px;
 margin:auto;
 background:#fff;
 border-radius:14px;
-padding:24px;
+padding:20px;
 position:relative;
 overflow:hidden;
 }
+
+/* ===== FILIGRANE ===== */
 .watermark{
 position:absolute;
 inset:0;
 background:url("HJ_Clean.png") center/70% no-repeat;
 opacity:0.12;
 pointer-events:none;
+z-index:0;
 }
-.content{position:relative}
 
-h1{text-align:center;margin:20px 0}
+/* ===== CONTENU ===== */
+.content{position:relative;z-index:1}
+
+.header{
+display:flex;
+gap:20px;
+align-items:center;
+flex-wrap:wrap;
+}
+.header img{max-width:140px}
+.header .info{font-size:13px}
+
+h1{text-align:center;margin:12px 0}
+
 .section-title{
-margin-top:26px;
+margin-top:18px;
 font-weight:bold;
 border-left:5px solid #22c55e;
 padding-left:10px;
 }
 
+/* ===== GRILLES ===== */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:14px;
-margin-top:12px;
-}
-.field label{font-size:13px;font-weight:600}
-.field input,.field select{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid #ccc;
+gap:12px;
+margin-top:10px;
 }
 
+.field label{
+display:block;
+font-size:13px;
+margin-bottom:4px;
+font-weight:600;
+}
+
+.field input,
+.field select{
+width:100%;
+padding:9px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+/* ===== EMPLOYÉS ===== */
 .employee-list label{
 display:flex;
 align-items:center;
@@ -60,24 +87,40 @@ gap:8px;
 margin:6px 0;
 }
 
+/* ===== HEURES ===== */
 .time-grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:20px;
+gap:16px;
+margin-top:10px;
 }
-.time-box{border:1px solid #ddd;border-radius:10px;padding:10px}
+.time-box{
+border:1px solid #ddd;
+border-radius:10px;
+padding:10px;
+}
+.time-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+}
 
+/* ===== SIGNATURE ===== */
 .signatures{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:20px;
-margin-top:20px;
+gap:16px;
+margin-top:14px;
 }
 @media(max-width:700px){
 .signatures{grid-template-columns:1fr}
 }
 
-.sig-box{border:1px dashed #aaa;border-radius:10px;padding:10px}
+.sig-box{
+border:1px dashed #aaa;
+border-radius:10px;
+padding:10px;
+}
 canvas{
 width:100%;
 height:140px;
@@ -86,32 +129,52 @@ border-radius:8px;
 touch-action:none;
 background:#fff;
 }
-.sig-actions{display:flex;gap:8px;margin-top:8px}
-
+.sig-actions{
+margin-top:6px;
+display:flex;
+gap:8px;
+}
 button{
-padding:10px 14px;
+padding:9px 12px;
 border:none;
 border-radius:8px;
 cursor:pointer;
 color:#fff;
+font-size:14px;
 }
 .confirm{background:#22c55e}
 .delete{background:#ef4444}
-.delete:disabled{opacity:.5}
+.delete:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
 .print{
-margin-top:30px;
+margin-top:14px;
 width:100%;
 background:#2563eb;
-font-size:16px;
+font-size:15px;
 }
 
-/* ===== PRINT : 1 SEULE PAGE ===== */
+/* ===== PRINT – 1 PAGE ===== */
 @media print{
-@page{size:A4;margin:8mm}
-body,html{overflow:hidden}
-.container{padding:6mm}
+@page{
+size:A4;
+margin:8mm;
+}
+html,body{
+width:210mm;
+height:297mm;
+overflow:hidden;
+background:#fff;
+}
+.container{
+width:100%;
+padding:6mm;
+border-radius:0;
+page-break-inside:avoid;
+}
 button,.sig-actions{display:none!important}
-canvas{height:110px}
+.watermark{opacity:0.08}
 }
 </style>
 </head>
@@ -119,16 +182,36 @@ canvas{height:110px}
 <body>
 <div class="container">
 <div class="watermark"></div>
+
 <div class="content">
+<div class="header">
+<img src="HJ_Clean.png" alt="Logo">
+<div class="info">
+<strong>Cleaning – Marke von HJ Corporate GbR</strong><br>
+Stauseestraße 27b, 54317 Riveris<br>
+Tel. +49 176 87898900 · info@hjcorporate.de
+</div>
+</div>
 
 <h1>Leistungsbestätigung</h1>
 
+<!-- MITARBEITER -->
 <div class="section-title">Mitarbeiter</div>
 <div class="employee-list">
-<label><input type="checkbox" class="emp"> Hervé Mbarga</label>
-<label><input type="checkbox" class="emp"> Jacky Massing</label>
+<label><input type="checkbox" class="emp" onchange="calc()"> Hervé Mbarga</label>
+<label><input type="checkbox" class="emp" onchange="calc()"> Jacky Massing</label>
 </div>
 
+<!-- KUNDE -->
+<div class="section-title">Kunde</div>
+<div class="grid">
+<div class="field"><label>Vorname</label><input></div>
+<div class="field"><label>Nachname</label><input></div>
+<div class="field"><label>Telefon</label><input></div>
+<div class="field"><label>Anschrift</label><input></div>
+</div>
+
+<!-- DATUM & ZEIT -->
 <div class="section-title">Datum & Zeit</div>
 <div class="grid">
 <div class="field"><label>Datum</label><input type="date"></div>
@@ -137,51 +220,53 @@ canvas{height:110px}
 <div class="time-grid">
 <div class="time-box">
 <strong>Beginn</strong>
-<div class="grid">
-<select id="sh"></select>
-<select id="sm"></select>
+<div class="time-row">
+<div class="field"><label>Stunde</label><select id="sh" onchange="calc()"></select></div>
+<div class="field"><label>Minute</label><select id="sm" onchange="calc()"></select></div>
 </div>
 </div>
 <div class="time-box">
 <strong>Ende</strong>
-<div class="grid">
-<select id="eh"></select>
-<select id="em"></select>
+<div class="time-row">
+<div class="field"><label>Stunde</label><select id="eh" onchange="calc()"></select></div>
+<div class="field"><label>Minute</label><select id="em" onchange="calc()"></select></div>
 </div>
 </div>
 </div>
 
+<!-- BERECHNUNG -->
 <div class="section-title">Berechnung</div>
 <div class="grid">
+<div class="field"><label>Anzahl Mitarbeiter</label><input id="anzahlMA" readonly></div>
 <div class="field"><label>Arbeitsstunden</label><input id="stunden" readonly></div>
-<div class="field"><label>€/Stunde</label><input id="preisStd" type="number"></div>
-<div class="field"><label>Kilometer</label><input id="km" type="number"></div>
-<div class="field"><label>€/km</label><input id="preisKm" type="number"></div>
+<div class="field"><label>€/Stunde</label><input id="preisStd" value="25" oninput="calc()"></div>
+<div class="field"><label>Kilometer</label><input id="km" value="0" oninput="calc()"></div>
+<div class="field"><label>€/km</label><input id="preisKm" value="0.30" oninput="calc()"></div>
 <div class="field"><label>Gesamtbetrag €</label><input id="gesamt" readonly></div>
 </div>
 
+<!-- SIGNATURES -->
 <div class="section-title">Unterschriften</div>
 <div class="signatures">
 <div class="sig-box">
 <strong>Kunde</strong>
 <canvas id="sigK"></canvas>
 <div class="sig-actions">
-<button class="confirm" id="ck">Bestätigen</button>
-<button class="delete" id="dk">Löschen</button>
+<button id="confirmK" class="confirm">Bestätigen</button>
+<button id="clearK" class="delete">Löschen</button>
 </div>
 </div>
 <div class="sig-box">
 <strong>Mitarbeiter</strong>
 <canvas id="sigM"></canvas>
 <div class="sig-actions">
-<button class="confirm" id="cm">Bestätigen</button>
-<button class="delete" id="dm">Löschen</button>
+<button id="confirmM" class="confirm">Bestätigen</button>
+<button id="clearM" class="delete">Löschen</button>
 </div>
 </div>
 </div>
 
 <button class="print" onclick="window.print()">Als PDF speichern / drucken</button>
-
 </div>
 </div>
 
@@ -189,45 +274,66 @@ canvas{height:110px}
 function fill(sel,max){
 for(let i=0;i<=max;i++){
 let o=document.createElement("option");
-o.text=o.value=String(i).padStart(2,"0");
-sel.add(o);
-}
-}
+o.value=o.text=String(i).padStart(2,"0");
+sel.appendChild(o);
+}}
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
 function calc(){
 let start=(+sh.value*60)+(+sm.value);
 let end=(+eh.value*60)+(+em.value);
-let diff=end-start;if(diff<0)diff+=1440;
-let hrs=diff/60;
+let diff=end-start;
+if(diff<0) diff+=1440;
+let hours=diff/60;
 
-let emp=document.querySelectorAll(".emp:checked").length;
-let total=hrs*emp*(+preisStd.value||0)+(+km.value||0)*(+preisKm.value||0);
+let employees=document.querySelectorAll(".emp:checked").length;
+anzahlMA.value=employees;
 
-stunden.value=hrs.toFixed(2);
+let priceHour=+preisStd.value||0;
+let kmVal=+km.value||0;
+let priceKm=+preisKm.value||0;
+
+let total=(hours*employees*priceHour)+(kmVal*priceKm);
+
+stunden.value=hours.toFixed(2);
 gesamt.value=total.toFixed(2);
 }
 
-["sh","sm","eh","em","preisStd","km","preisKm"].forEach(id=>{
-document.getElementById(id).addEventListener("input",calc);
-});
-document.querySelectorAll(".emp").forEach(e=>e.addEventListener("change",calc));
+/* SIGNATURES – VERROUILLAGE TOTAL */
+function signatureController(canvas,confirmBtn,clearBtn){
+const ctx=canvas.getContext("2d");
+let drawing=false,locked=false;
 
-function signature(canvas,ok,del){
-const ctx=canvas.getContext("2d");let draw=false,lock=false;
-canvas.onpointerdown=e=>{if(lock)return;draw=true;ctx.beginPath()}
-canvas.onpointermove=e=>{
-if(!draw||lock)return;
+canvas.addEventListener("pointerdown",e=>{
+if(locked) return;
+drawing=true;
+ctx.beginPath();
 const r=canvas.getBoundingClientRect();
-ctx.lineWidth=2;ctx.lineCap="round";
-ctx.lineTo(e.clientX-r.left,e.clientY-r.top);ctx.stroke();
+ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+});
+canvas.addEventListener("pointermove",e=>{
+if(!drawing||locked) return;
+const r=canvas.getBoundingClientRect();
+ctx.lineWidth=2;
+ctx.lineCap="round";
+ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
+ctx.stroke();
+});
+canvas.addEventListener("pointerup",()=>{drawing=false;ctx.beginPath();});
+
+confirmBtn.onclick=()=>{
+locked=true;
+canvas.style.pointerEvents="none";
+clearBtn.disabled=true;
+};
+clearBtn.onclick=()=>{
+if(locked) return;
+ctx.clearRect(0,0,canvas.width,canvas.height);
+};
 }
-canvas.onpointerup=()=>{draw=false;ctx.beginPath()}
-ok.onclick=()=>{lock=true;canvas.style.pointerEvents="none";del.disabled=true}
-del.onclick=()=>{if(lock)return;ctx.clearRect(0,0,canvas.width,canvas.height)}
-}
-signature(sigK,ck,dk);
-signature(sigM,cm,dm);
+
+signatureController(sigK,confirmK,clearK);
+signatureController(sigM,confirmM,clearM);
 </script>
 
 </body>
