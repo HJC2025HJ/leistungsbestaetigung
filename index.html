@@ -13,7 +13,6 @@ padding:16px;
 font-family:Arial,Helvetica,sans-serif;
 background:#eef2f3;
 }
-
 .container{
 max-width:1200px;
 margin:auto;
@@ -23,28 +22,14 @@ padding:24px;
 position:relative;
 overflow:hidden;
 }
-
-/* ===== FILIGRANE ===== */
 .watermark{
 position:absolute;
 inset:0;
 background:url("HJ_Clean.png") center/70% no-repeat;
 opacity:0.12;
 pointer-events:none;
-z-index:0;
 }
-
-/* ===== CONTENU ===== */
-.content{position:relative;z-index:1}
-
-.header{
-display:flex;
-gap:20px;
-align-items:center;
-flex-wrap:wrap;
-}
-.header img{max-width:150px}
-.header .info{font-size:14px}
+.content{position:relative}
 
 h1{text-align:center;margin:20px 0}
 .section-title{
@@ -54,31 +39,20 @@ border-left:5px solid #22c55e;
 padding-left:10px;
 }
 
-/* ===== GRILLES ===== */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:14px;
 margin-top:12px;
 }
-
-.field label{
-display:block;
-font-size:13px;
-margin-bottom:4px;
-font-weight:600;
-}
-
-.field input,
-.field select{
+.field label{font-size:13px;font-weight:600}
+.field input,.field select{
 width:100%;
 padding:10px;
 border-radius:8px;
 border:1px solid #ccc;
-font-size:14px;
 }
 
-/* ===== EMPLOYÉS ===== */
 .employee-list label{
 display:flex;
 align-items:center;
@@ -86,25 +60,13 @@ gap:8px;
 margin:6px 0;
 }
 
-/* ===== HEURES ===== */
 .time-grid{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:20px;
 }
-.time-box{
-border:1px solid #ddd;
-border-radius:10px;
-padding:10px;
-}
-.time-box strong{display:block;margin-bottom:6px}
-.time-row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-}
+.time-box{border:1px solid #ddd;border-radius:10px;padding:10px}
 
-/* ===== SIGNATURE ===== */
 .signatures{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -115,24 +77,17 @@ margin-top:20px;
 .signatures{grid-template-columns:1fr}
 }
 
-.sig-box{
-border:1px dashed #aaa;
-border-radius:10px;
-padding:10px;
-}
+.sig-box{border:1px dashed #aaa;border-radius:10px;padding:10px}
 canvas{
 width:100%;
-height:160px;
+height:140px;
 border:2px dashed #999;
 border-radius:8px;
 touch-action:none;
 background:#fff;
 }
-.sig-actions{
-margin-top:8px;
-display:flex;
-gap:8px;
-}
+.sig-actions{display:flex;gap:8px;margin-top:8px}
+
 button{
 padding:10px 14px;
 border:none;
@@ -142,10 +97,7 @@ color:#fff;
 }
 .confirm{background:#22c55e}
 .delete{background:#ef4444}
-.delete:disabled{
-opacity:.5;
-cursor:not-allowed;
-}
+.delete:disabled{opacity:.5}
 .print{
 margin-top:30px;
 width:100%;
@@ -153,49 +105,13 @@ background:#2563eb;
 font-size:16px;
 }
 
-/* =====================================================
-✅ SEULE MODIFICATION — PRINT SUR 1 SEULE PAGE
-===================================================== */
+/* ===== PRINT : 1 SEULE PAGE ===== */
 @media print{
-@page{
-size:A4;
-margin:8mm;
-}
-
-html,body{
-height:100%;
-overflow:hidden;
-background:#fff;
-padding:0;
-}
-
-.container{
-width:100%;
-max-width:100%;
-padding:6mm;
-border-radius:0;
-}
-
-/* signatures visibles mais compactes */
-canvas{
-height:110px !important;
-max-height:110px !important;
-}
-
-/* boutons jamais imprimés */
-button,
-.sig-actions{
-display:none !important;
-}
-
-/* aucune coupure */
-.section-title,
-.signatures,
-.sig-box{
-page-break-inside:avoid;
-}
-
-.watermark{opacity:0.08}
+@page{size:A4;margin:8mm}
+body,html{overflow:hidden}
+.container{padding:6mm}
+button,.sig-actions{display:none!important}
+canvas{height:110px}
 }
 </style>
 </head>
@@ -203,31 +119,14 @@ page-break-inside:avoid;
 <body>
 <div class="container">
 <div class="watermark"></div>
-
 <div class="content">
-<div class="header">
-<img src="HJ_Clean.png" alt="Logo">
-<div class="info">
-<strong>Cleaning – Marke von HJ Corporate GbR</strong><br>
-Stauseestraße 27b, 54317 Riveris<br>
-Tel. +49 176 87898900 · info@hjcorporate.de
-</div>
-</div>
 
 <h1>Leistungsbestätigung</h1>
 
 <div class="section-title">Mitarbeiter</div>
 <div class="employee-list">
-<label><input type="checkbox"> Hervé Mbarga</label>
-<label><input type="checkbox"> Jacky Massing</label>
-</div>
-
-<div class="section-title">Kunde</div>
-<div class="grid">
-<div class="field"><label>Vorname</label><input></div>
-<div class="field"><label>Nachname</label><input></div>
-<div class="field"><label>Telefon</label><input></div>
-<div class="field"><label>Anschrift</label><input></div>
+<label><input type="checkbox" class="emp"> Hervé Mbarga</label>
+<label><input type="checkbox" class="emp"> Jacky Massing</label>
 </div>
 
 <div class="section-title">Datum & Zeit</div>
@@ -238,18 +137,27 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <div class="time-grid">
 <div class="time-box">
 <strong>Beginn</strong>
-<div class="time-row">
-<div class="field"><label>Stunde</label><select id="sh"></select></div>
-<div class="field"><label>Minute</label><select id="sm"></select></div>
+<div class="grid">
+<select id="sh"></select>
+<select id="sm"></select>
 </div>
 </div>
 <div class="time-box">
 <strong>Ende</strong>
-<div class="time-row">
-<div class="field"><label>Stunde</label><select id="eh"></select></div>
-<div class="field"><label>Minute</label><select id="em"></select></div>
+<div class="grid">
+<select id="eh"></select>
+<select id="em"></select>
 </div>
 </div>
+</div>
+
+<div class="section-title">Berechnung</div>
+<div class="grid">
+<div class="field"><label>Arbeitsstunden</label><input id="stunden" readonly></div>
+<div class="field"><label>€/Stunde</label><input id="preisStd" type="number"></div>
+<div class="field"><label>Kilometer</label><input id="km" type="number"></div>
+<div class="field"><label>€/km</label><input id="preisKm" type="number"></div>
+<div class="field"><label>Gesamtbetrag €</label><input id="gesamt" readonly></div>
 </div>
 
 <div class="section-title">Unterschriften</div>
@@ -258,21 +166,22 @@ Tel. +49 176 87898900 · info@hjcorporate.de
 <strong>Kunde</strong>
 <canvas id="sigK"></canvas>
 <div class="sig-actions">
-<button id="confirmK" class="confirm">Bestätigen</button>
-<button id="clearK" class="delete">Löschen</button>
+<button class="confirm" id="ck">Bestätigen</button>
+<button class="delete" id="dk">Löschen</button>
 </div>
 </div>
 <div class="sig-box">
 <strong>Mitarbeiter</strong>
 <canvas id="sigM"></canvas>
 <div class="sig-actions">
-<button id="confirmM" class="confirm">Bestätigen</button>
-<button id="clearM" class="delete">Löschen</button>
+<button class="confirm" id="cm">Bestätigen</button>
+<button class="delete" id="dm">Löschen</button>
 </div>
 </div>
 </div>
 
 <button class="print" onclick="window.print()">Als PDF speichern / drucken</button>
+
 </div>
 </div>
 
@@ -286,48 +195,39 @@ sel.add(o);
 }
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
-function signatureController(canvas, confirmBtn, clearBtn){
-const ctx=canvas.getContext("2d");
-let drawing=false;
-let locked=false;
+function calc(){
+let start=(+sh.value*60)+(+sm.value);
+let end=(+eh.value*60)+(+em.value);
+let diff=end-start;if(diff<0)diff+=1440;
+let hrs=diff/60;
 
-canvas.addEventListener("pointerdown",e=>{
-if(locked) return;
-drawing=true;
-ctx.beginPath();
-const r=canvas.getBoundingClientRect();
-ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
-});
+let emp=document.querySelectorAll(".emp:checked").length;
+let total=hrs*emp*(+preisStd.value||0)+(+km.value||0)*(+preisKm.value||0);
 
-canvas.addEventListener("pointermove",e=>{
-if(!drawing || locked) return;
-const r=canvas.getBoundingClientRect();
-ctx.lineWidth=2;
-ctx.lineCap="round";
-ctx.lineTo(e.clientX-r.left,e.clientY-r.top);
-ctx.stroke();
-});
-
-canvas.addEventListener("pointerup",()=>{
-drawing=false;
-ctx.beginPath();
-});
-
-confirmBtn.onclick=()=>{
-locked=true;
-canvas.style.pointerEvents="none";
-canvas.style.opacity="0.85";
-clearBtn.disabled=true;
-};
-
-clearBtn.onclick=()=>{
-if(locked) return;
-ctx.clearRect(0,0,canvas.width,canvas.height);
-};
+stunden.value=hrs.toFixed(2);
+gesamt.value=total.toFixed(2);
 }
 
-signatureController(sigK,confirmK,clearK);
-signatureController(sigM,confirmM,clearM);
+["sh","sm","eh","em","preisStd","km","preisKm"].forEach(id=>{
+document.getElementById(id).addEventListener("input",calc);
+});
+document.querySelectorAll(".emp").forEach(e=>e.addEventListener("change",calc));
+
+function signature(canvas,ok,del){
+const ctx=canvas.getContext("2d");let draw=false,lock=false;
+canvas.onpointerdown=e=>{if(lock)return;draw=true;ctx.beginPath()}
+canvas.onpointermove=e=>{
+if(!draw||lock)return;
+const r=canvas.getBoundingClientRect();
+ctx.lineWidth=2;ctx.lineCap="round";
+ctx.lineTo(e.clientX-r.left,e.clientY-r.top);ctx.stroke();
+}
+canvas.onpointerup=()=>{draw=false;ctx.beginPath()}
+ok.onclick=()=>{lock=true;canvas.style.pointerEvents="none";del.disabled=true}
+del.onclick=()=>{if(lock)return;ctx.clearRect(0,0,canvas.width,canvas.height)}
+}
+signature(sigK,ck,dk);
+signature(sigM,cm,dm);
 </script>
 
 </body>
