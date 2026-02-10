@@ -24,15 +24,38 @@ position:relative;
 overflow:hidden;
 }
 
+/* ===== LOGO FILIGRANE ===== */
 .watermark{
 position:absolute;
 inset:0;
 background:url("HJ_Clean.png") center/65% no-repeat;
-opacity:0.12;
+opacity:0.08;
 pointer-events:none;
 }
 
+/* ===== CONTENU ===== */
 .content{position:relative;z-index:1}
+
+/* ===== EN-TÊTE ENTREPRISE ===== */
+.header{
+display:flex;
+gap:20px;
+align-items:center;
+flex-wrap:wrap;
+border-bottom:2px solid #e5e7eb;
+padding-bottom:12px;
+margin-bottom:16px;
+}
+
+.header img{
+max-width:140px;
+height:auto;
+}
+
+.company-info{
+font-size:13px;
+line-height:1.5;
+}
 
 h1{text-align:center;margin:16px 0}
 
@@ -117,7 +140,7 @@ background:#2563eb;
 font-size:16px;
 }
 
-/* ===== PRINT : 1 PAGE ===== */
+/* ===== PRINT ===== */
 @media print{
 @page{size:A4 portrait;margin:10mm;}
 
@@ -141,7 +164,13 @@ border-radius:0;
 padding:0;
 }
 
-.watermark{opacity:0.12;}
+.watermark{
+opacity:0.12;
+}
+
+.header{
+border-bottom:1px solid #000;
+}
 }
 </style>
 </head>
@@ -149,11 +178,24 @@ padding:0;
 <body>
 <div class="container">
 <div class="watermark"></div>
+
 <div class="content">
+
+<!-- ================= ENTREPRISE ================= -->
+<div class="header">
+<img src="HJ_Clean.png" alt="HJ Cleaning Logo">
+<div class="company-info">
+<strong>Cleaning – Marke von HJ Corporate GbR</strong><br>
+Stauseestraße 27b<br>
+54317 Riveris<br>
+Tel. +49 176 87898900<br>
+info@hjcorporate.de
+</div>
+</div>
 
 <h1>Leistungsbestätigung</h1>
 
-<!-- ================= EMPLOYÉS ================= -->
+<!-- ================= MITARBEITER ================= -->
 <div class="section-title">Mitarbeiter</div>
 <div class="employee-list">
 <label><input type="checkbox" class="emp"> Hervé Mbarga</label>
@@ -163,25 +205,13 @@ padding:0;
 <!-- ================= CLIENT ================= -->
 <div class="section-title">Kundendaten</div>
 <div class="grid">
-  <div class="field">
-    <label>Vorname</label>
-    <input id="clientVorname">
-  </div>
-  <div class="field">
-    <label>Nachname</label>
-    <input id="clientNachname">
-  </div>
-  <div class="field">
-    <label>Telefon</label>
-    <input id="clientTelefon">
-  </div>
-  <div class="field">
-    <label>Anschrift</label>
-    <input id="clientAdresse">
-  </div>
+<div class="field"><label>Vorname</label><input></div>
+<div class="field"><label>Nachname</label><input></div>
+<div class="field"><label>Telefon</label><input></div>
+<div class="field"><label>Anschrift</label><input></div>
 </div>
 
-<!-- ================= DATE & HEURE ================= -->
+<!-- ================= ZEIT ================= -->
 <div class="section-title">Datum & Zeit</div>
 <div class="time-grid">
 <div class="field">
@@ -196,7 +226,7 @@ padding:0;
 </div>
 </div>
 
-<!-- ================= CALCUL ================= -->
+<!-- ================= BERECHNUNG ================= -->
 <div class="section-title">Berechnung</div>
 <div class="grid">
 <div class="field"><label>Anzahl Mitarbeiter</label><input id="empCount" readonly></div>
@@ -236,12 +266,7 @@ padding:0;
 
 <script>
 /* ===== HEURES ===== */
-function fill(s,m){
-for(let i=0;i<=m;i++){
-let o=document.createElement("option");
-o.value=o.text=String(i).padStart(2,"0");
-s.add(o);
-}}
+function fill(s,m){for(let i=0;i<=m;i++){let o=document.createElement("option");o.value=o.text=String(i).padStart(2,"0");s.add(o)}}
 fill(sh,23);fill(eh,23);fill(sm,59);fill(em,59);
 
 /* ===== CALCUL ===== */
@@ -255,7 +280,6 @@ const base=Math.max(end-start,0);
 
 const hrs=base*emp;
 hours.value=hrs.toFixed(2);
-
 total.value=((hrs*rate.value)+(km.value*kmrate.value)).toFixed(2);
 }
 document.querySelectorAll("input,select").forEach(e=>e.addEventListener("input",calc));
